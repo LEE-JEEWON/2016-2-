@@ -14,10 +14,20 @@ class StartScreen1 extends JFrame {
 	public StartScreen1() {
 
 		setTitle("Magician Of Code");
-		setBounds(137, 35, 530, 470);
+		setBounds(137, 35, 870, 570);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		panel = new JPanel();
+		ImageIcon icon = new ImageIcon("C:\\photoshop\\first.png"); // 넣을 그림
+		Image img = icon.getImage();
+
+		panel = new JPanel() {
+			public void paintComponent(Graphics g) { // 페인트 컴포넌트 함수로 jpanel에 넣음
+				g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+				setOpaque(false);
+				super.paintComponent(g);
+			}
+		};
+		
 		panel.setLayout(null);
 
 		makeComponent();
@@ -31,7 +41,7 @@ class StartScreen1 extends JFrame {
 
 	public void makeComponent() {
 		jLabel1 = new JLabel();
-		jLabel1.setText("코드의 마법사");
+		jLabel1.setText(" ");
 		jLabel1.setFont(new Font("Dialog.plain", 0, 22));
 		jLabel1.setIcon(new ImageIcon(""));
 		jLabel1.setForeground(new Color(-13421773));
@@ -68,7 +78,7 @@ class StartScreen2 extends JFrame {
 	public StartScreen2() {
 
 		setTitle("Magician Of Code");
-		setBounds(125, 30, 860, 560);
+		setBounds(125, 30, 870, 570);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\startscreen.png"); // 넣을
@@ -98,7 +108,7 @@ class StartScreen2 extends JFrame {
 		jButton1.setBackground(Color.WHITE);
 		jButton1.setOpaque(false);
 		jButton1.setBorderPainted(false);
-		jButton1.setBounds(360, 280, 140, 52);
+		jButton1.setBounds(390, 190, 140, 52);
 		ActionListener listener1 = new StartButton(this);
 		jButton1.addActionListener(listener1);
 		panel.add(jButton1);
@@ -109,7 +119,7 @@ class StartScreen2 extends JFrame {
 		jButton2.setBackground(Color.WHITE);
 		jButton2.setOpaque(false);
 		jButton2.setBorderPainted(false);
-		jButton2.setBounds(360, 340, 140, 52);
+		jButton2.setBounds(390, 250, 140, 52);
 		ActionListener listener2 = new RankingButton(this, 2);
 		jButton2.addActionListener(listener2);
 		panel.add(jButton2);
@@ -120,7 +130,7 @@ class StartScreen2 extends JFrame {
 		jButton3.setBackground(Color.WHITE);
 		jButton3.setOpaque(false);
 		jButton3.setBorderPainted(false);
-		jButton3.setBounds(360, 400, 140, 52);
+		jButton3.setBounds(390, 310, 140, 52);
 		ActionListener listener3 = new EndButton();
 		jButton3.addActionListener(listener3);
 		panel.add(jButton3);
@@ -1068,6 +1078,7 @@ class FinalScreenButton implements ActionListener {
 	}
 }
 
+
 class FinalScreen extends JFrame {
 	JPanel panel;
 
@@ -1076,7 +1087,7 @@ class FinalScreen extends JFrame {
 	public FinalScreen() {
 
 		setTitle("Magician Of Code");
-		setBounds(125, 30, 860, 560);
+		setBounds(125, 30, 870, 570);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\lastscreen.png"); // 넣을 그림
@@ -1232,11 +1243,12 @@ class RetryScreen extends LevelLowScreen {
 		life[2].setVisible(false);
 
 		jButton1 = new JButton();
-		jButton1.setText("돌아가기");
 		jButton1.setFont(new Font("Dialog.plain", 0, 12));
-		jButton1.setIcon(new ImageIcon(""));
-		jButton1.setForeground(new Color(-13421773));
-		jButton1.setBounds(14, 7, 95, 43);
+		jButton1.setIcon(new ImageIcon("C:\\photoshop\\return.png"));
+		jButton1.setBackground(Color.WHITE);
+		jButton1.setOpaque(false);
+		jButton1.setBorderPainted(false);
+		jButton1.setBounds(10, 7, 60, 60);
 		ActionListener listener1 = new FinalScreenButton(this, 1);
 		jButton1.addActionListener(listener1);
 		panel.add(jButton1);
@@ -1253,7 +1265,6 @@ class RetryScreen extends LevelLowScreen {
 		// jButton4.addActionListener(listener4);
 	}
 }
-
 class SolutionScreen extends JFrame {
 	JPanel panel;
 
@@ -1264,7 +1275,7 @@ class SolutionScreen extends JFrame {
 	public SolutionScreen() {
 
 		setTitle("Magician Of Code");
-		setBounds(125, 30, 860, 560);
+		setBounds(125, 30, 870, 570);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\solution.png"); // 넣을 그림
@@ -1301,11 +1312,11 @@ class SolutionScreen extends JFrame {
 
 		jButton1 = new JButton();
 		jButton1.setFont(new Font("Dialog.plain", 0, 12));
-		jButton1.setIcon(new ImageIcon("C:\\photoshop\\돌아가기.png"));
+		jButton1.setIcon(new ImageIcon("C:\\photoshop\\return.png"));
 		jButton1.setBackground(Color.WHITE);
 		jButton1.setOpaque(false);
 		jButton1.setBorderPainted(false);
-		jButton1.setBounds(14, 7, 52, 52);
+		jButton1.setBounds(6, 7, 60, 60);
 		ActionListener listener1 = new FinalScreenButton(this);
 		jButton1.addActionListener(listener1);
 		panel.add(jButton1);
@@ -1316,7 +1327,7 @@ class SolutionScreen extends JFrame {
 		jButton2.setBackground(Color.WHITE);
 		jButton2.setOpaque(false);
 		jButton2.setBorderPainted(false);
-		jButton2.setBounds(580, 455, 115, 66);
+		jButton2.setBounds(30, 445, 115, 66);
 		panel.add(jButton2);
 
 		jButton3 = new JButton();
@@ -1325,7 +1336,7 @@ class SolutionScreen extends JFrame {
 		jButton3.setBackground(Color.WHITE);
 		jButton3.setOpaque(false);
 		jButton3.setBorderPainted(false);
-		jButton3.setBounds(695, 455, 115, 66);
+		jButton3.setBounds(695, 445, 115, 66);
 		panel.add(jButton3);
 	}
 }
