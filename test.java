@@ -1,8 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
-import java.util.StringTokenizer;
 
 import javax.swing.*;
 
@@ -16,6 +14,7 @@ class StartScreen1 extends JFrame {
 		setTitle("Magician Of Code");
 		setBounds(137, 35, 870, 570);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\first.png"); // 넣을 그림
 		Image img = icon.getImage();
@@ -27,10 +26,9 @@ class StartScreen1 extends JFrame {
 				super.paintComponent(g);
 			}
 		};
-		
+
 		panel.setLayout(null);
 
-		makeComponent();
 
 		getContentPane().add(panel, BorderLayout.CENTER);
 
@@ -39,16 +37,6 @@ class StartScreen1 extends JFrame {
 		thread.start();
 	}
 
-	public void makeComponent() {
-		jLabel1 = new JLabel();
-		jLabel1.setText(" ");
-		jLabel1.setFont(new Font("Dialog.plain", 0, 22));
-		jLabel1.setIcon(new ImageIcon(""));
-		jLabel1.setForeground(new Color(-13421773));
-		jLabel1.setBackground(new Color(-1118482));
-		jLabel1.setBounds(192, 180, 144, 36);
-		panel.add(jLabel1);
-	}
 }
 
 class StartScreenFlash implements Runnable {
@@ -80,6 +68,7 @@ class StartScreen2 extends JFrame {
 		setTitle("Magician Of Code");
 		setBounds(125, 30, 870, 570);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\startscreen.png"); // 넣을
 																			// 그림
@@ -163,9 +152,9 @@ class TutorialScreen extends JFrame {
 
 	JLabel jLabel1, jLabel2, jLabel3;
 
-	JTextField jTextField1;
+	JTextField jTextField1, jTextField2;
 
-	JButton jButton1, jButton2, jButton3, jButton4, jButton5, jButton6;
+	JButton jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7;
 	JButton[] exButton = new JButton[12];
 	JButton[] life = new JButton[3];
 
@@ -177,19 +166,20 @@ class TutorialScreen extends JFrame {
 	public TutorialScreen() {
 
 		setTitle("Magician Of Code");
-		setBounds(125, 30, 860, 560);
+		setBounds(125, 30, 870, 670);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\tutorial.png");
-        Image img =icon.getImage();
-        
-        panel = new JPanel() {
-            public void paintComponent(Graphics g) { // 페인트 컴포넌트 함수로 jpanel에 넣음
-                g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
-                setOpaque(false); 
-                super.paintComponent(g);
-            }
-        };
+		Image img = icon.getImage();
+
+		panel = new JPanel() {
+			public void paintComponent(Graphics g) { // 페인트 컴포넌트 함수로 jpanel에 넣음
+				g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+				setOpaque(false);
+				super.paintComponent(g);
+			}
+		};
 		panel.setLayout(null);
 
 		makeComponent();
@@ -207,25 +197,33 @@ class TutorialScreen extends JFrame {
 		jTextField1.setText("문제문제문제");
 		jTextField1.setFont(new Font("Dialog.plain", 0, 12));
 		jTextField1.setBackground(new Color(255, 255, 255, 178));
-		jTextField1.setBounds(64, 59, 323, 454);
+		jTextField1.setBounds(75, 59, 323, 454);
 		panel.add(jTextField1);
+
+		jTextField2 = new JTextField();
+		jTextField2.setText("안녕? 나는 도로시야 코드의 마법사를 찾으러 왔구나!");
+		jTextField2.setFont(new Font("Dialog.plain", 0, 12));
+		jTextField2.setOpaque(false);
+		jTextField2.setBorder(null);
+		jTextField2.setBounds(200, 504, 329, 90);
+		panel.add(jTextField2);
 
 		jLabel1 = new JLabel(); // 시간 초 단위
 		jLabel1.setText("00");
-		jLabel1.setFont(new Font("Dialog.plain", 0, 12));
-		jLabel1.setBounds(648, 23, 26, 12);
+		jLabel1.setFont(new Font("맑은고딕", Font.BOLD, 20));
+		jLabel1.setBounds(635, 19, 30, 20);
 		panel.add(jLabel1);
 
 		jLabel2 = new JLabel(); // 시간 분 단위
 		jLabel2.setText("00");
-		jLabel2.setFont(new Font("Dialog.plain", 0, 12));
-		jLabel2.setBounds(622, 19, 27, 20);
+		jLabel2.setFont(new Font("맑은고딕", Font.BOLD, 20));
+		jLabel2.setBounds(595, 19, 30, 20);
 		panel.add(jLabel2);
 
 		jLabel3 = new JLabel();
 		jLabel3.setText(":");
-		jLabel3.setFont(new Font("Dialog.plain", 0, 12));
-		jLabel3.setBounds(641, 18, 10, 21);
+		jLabel3.setFont(new Font("맑은고딕", Font.BOLD, 20));
+		jLabel3.setBounds(623, 18, 10, 21);
 		panel.add(jLabel3);
 
 		for (int i = 0; i < 12; i++) {
@@ -233,7 +231,7 @@ class TutorialScreen extends JFrame {
 			exButton[i].setText("보기" + (i + 1));
 			exButton[i].setFont(new Font("Dialog.plain", 0, 12));
 			exButton[i].setIcon(new ImageIcon(""));
-			exButton[i].setForeground(new Color(-13421773));
+			exButton[i].setBackground(new Color(255, 255, 255, 250));
 			ActionListener listener = new ExButtonMoving(this, i);
 			exButton[i].addActionListener(listener);
 			panel.add(exButton[i]);
@@ -281,24 +279,36 @@ class TutorialScreen extends JFrame {
 
 		jButton5 = new JButton();
 		jButton5.setFont(new Font("Dialog.plain", 0, 12));
-		jButton5.setIcon(new ImageIcon("C:\\photoshop\\돌아가기.png"));
+		jButton5.setIcon(new ImageIcon(" "));
 		jButton5.setBackground(Color.WHITE);
 		jButton5.setOpaque(false);
 		jButton5.setBorderPainted(false);
-		jButton5.setBounds(15, 10, 52, 52);
+		jButton5.setBounds(15, 10, 1, 1);
 		ActionListener listener5 = new ReturnButton(this, 1);
 		jButton5.addActionListener(listener5);
 		panel.add(jButton5);
 
 		jButton6 = new JButton();
-		jButton6.setText("skip");
 		jButton6.setFont(new Font("Dialog.plain", 0, 12));
-		jButton6.setIcon(new ImageIcon(""));
-		jButton6.setForeground(new Color(-13421773));
-		jButton6.setBounds(125, 10, 100, 50);
+		jButton6.setIcon(new ImageIcon("C:\\photoshop\\skip.png"));
+		jButton6.setBackground(Color.WHITE);
+		jButton6.setOpaque(false);
+		jButton6.setBorderPainted(false);
+		jButton6.setBounds(5, 8, 87, 37);
 		ActionListener listener6 = new SkipButton(this);
 		jButton6.addActionListener(listener6);
 		panel.add(jButton6);
+
+		jButton7 = new JButton();
+		jButton7.setFont(new Font("Dialog.plain", 0, 12));
+		jButton7.setIcon(new ImageIcon("C:\\photoshop\\화살표.png"));
+		jButton7.setBackground(Color.WHITE);
+		jButton7.setOpaque(false);
+		jButton7.setBorderPainted(false);
+		jButton7.setBounds(671, 547, 60, 50);
+		ActionListener listener7 = new NextButton(this, 0);
+		jButton7.addActionListener(listener7);
+		panel.add(jButton7);
 
 		for (int i = 0; i < 3; i++) {
 			life[i] = new JButton();
@@ -326,6 +336,37 @@ class TutorialScreen extends JFrame {
 		exButton[0].setBounds(407, 150, 134, 56);
 		exButton[1].setBounds(552, 150, 134, 56);
 		exButton[2].setBounds(697, 150, 134, 56);
+	}
+}
+
+class NextButton implements ActionListener {
+	TutorialScreen tutorialScreen;
+	int num = 0;
+
+	public NextButton(TutorialScreen tutorialScreen, int num) {
+		this.tutorialScreen = tutorialScreen;
+		this.num = num;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		switch(num++) {
+		case 0: {
+			tutorialScreen.jTextField2.setText("안녕하세요");
+			break;
+		}
+		case 1: {
+			tutorialScreen.jTextField2.setText("반가워요");
+			break;
+		}
+		case 2: {
+			tutorialScreen.jTextField2.setText("감사합니다");
+			break;
+		}
+		case 3: {
+			tutorialScreen.jTextField2.setText("ㅎㅎㅎㅎㅎㅎ");
+			break;
+		}
+		}
 	}
 }
 
@@ -430,8 +471,8 @@ class ReturnButton implements ActionListener {
 			finalScreen.setVisible(false);
 		else
 			tutorialScreen.setVisible(false);
-		StartScreen1 startScreen1 = new StartScreen1();
-		startScreen1.setVisible(true);
+		StartScreen2 startScreen2 = new StartScreen2();
+		startScreen2.setVisible(true);
 	}
 }
 
@@ -457,7 +498,7 @@ class LevelChoiceScreen1 extends JFrame {
 	public LevelChoiceScreen1() {
 
 		setTitle("Magician Of Code");
-		setBounds(125, 30, 860, 560);
+		setBounds(125, 30, 870, 570);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\level.png"); // 넣을 그림
@@ -566,11 +607,12 @@ class LevelLowScreen extends TutorialScreen {
 	int remainLifeCount = 3;
 
 	JLabel image;
-	
+
 	ActionListener listener3, listener4;
 
 	public LevelLowScreen() {
-		
+
+		setBounds(125, 30, 870, 570);
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\game1.png"); // 넣을 그림
 
 		image = new JLabel(icon);
@@ -638,13 +680,13 @@ class PassButton implements ActionListener {
 	}
 }
 
-class CheckButton implements ActionListener {  // 여기서 맞는지 틀린지 확인하는 로직
+class CheckButton implements ActionListener {
 	TutorialScreen tutorialScreen;
 	LevelLowScreen levelLowScreen;
 
 	int num = 0;
 
-	boolean right = false;
+	boolean right = true;
 
 	public CheckButton(TutorialScreen tutorialScreen, int num) {
 		this.tutorialScreen = tutorialScreen;
@@ -707,21 +749,20 @@ class Life {
 
 class LevelMiddleScreen extends LevelLowScreen {
 	JButton[] restTime = new JButton[16];
-	
+
 	public LevelMiddleScreen() {
 
-		setBounds(125, 30, 860, 560);
-		setResizable(false);
-		
+		setBounds(125, 30, 870, 570);
+
 		makeComponent3();
-		
+
 		panel.remove(image);
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\game2.png"); // 넣을 그림
 
 		image = new JLabel(icon);
 		image.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
 		panel.add(image);
-		
+
 		Runnable run = new Timer(restTime);
 		Thread thread = new Thread(run);
 		thread.start();
@@ -735,11 +776,11 @@ class LevelMiddleScreen extends LevelLowScreen {
 			restTime[i].setOpaque(false);
 			restTime[i].setBorderPainted(false);
 
-			if (i < 8) 
+			if (i < 8)
 				restTime[i].setIcon(new ImageIcon("C:\\photoshop\\노란박스.png"));
-			else 
+			else
 				restTime[i].setIcon(new ImageIcon("C:\\photoshop\\빨간박스.png"));
-			
+
 			restTime[i].setBounds(20, interval, 25, 14);
 			panel.add(restTime[i]);
 			interval += 15;
@@ -775,14 +816,14 @@ class Timer implements Runnable {
 class LevelHighScreen extends LevelMiddleScreen { // 가리기 구현할 부분
 
 	public LevelHighScreen() {
-		
+
 		panel.remove(image);
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\game3.png"); // 넣을 그림
 
 		JLabel image = new JLabel(icon);
 		image.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
 		panel.add(image);
-		
+
 		makeComponent4();
 	}
 
@@ -792,6 +833,8 @@ class LevelHighScreen extends LevelMiddleScreen { // 가리기 구현할 부분
 }
 
 class SuccessScreen extends JFrame {
+	private static final int White = 0;
+
 	JPanel panel;
 
 	JLabel jLabel1;
@@ -799,8 +842,9 @@ class SuccessScreen extends JFrame {
 	public SuccessScreen() {
 
 		setTitle("Magician Of Code");
-		setBounds(128, 21, 530, 470);
+		setBounds(230, 150, 300, 280);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
 		panel = new JPanel();
 		panel.setLayout(null);
@@ -816,12 +860,10 @@ class SuccessScreen extends JFrame {
 
 	public void makeComponent() {
 		jLabel1 = new JLabel();
-		jLabel1.setText("성공 ㅎㅎ");
 		jLabel1.setFont(new Font("Dialog.plain", 0, 36));
-		jLabel1.setIcon(new ImageIcon(""));
-		jLabel1.setForeground(new Color(-13421773));
-		jLabel1.setBackground(new Color(-1118482));
-		jLabel1.setBounds(179, 138, 198, 148);
+		jLabel1.setIcon(new ImageIcon("C:\\photoshop\\success.png"));
+		jLabel1.setBackground(new Color(White));
+		jLabel1.setBounds(0, 0, 300, 240);
 		panel.add(jLabel1);
 	}
 }
@@ -833,9 +875,10 @@ class FailScreen extends JFrame {
 
 	public FailScreen() {
 		UIManager.put("swing.boldMetal", Boolean.FALSE);
+		setResizable(false);
 
 		setTitle("Magician Of Code");
-		setBounds(128, 21, 530, 470);
+		setBounds(230, 150, 300, 280);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		panel = new JPanel();
@@ -852,12 +895,11 @@ class FailScreen extends JFrame {
 
 	public void makeComponent() {
 		jLabel1 = new JLabel();
-		jLabel1.setText("실패 ㅠㅠ");
 		jLabel1.setFont(new Font("Dialog.plain", 0, 36));
-		jLabel1.setIcon(new ImageIcon(""));
+		jLabel1.setIcon(new ImageIcon("C:\\photoshop\\fail.png"));
 		jLabel1.setForeground(new Color(-13421773));
 		jLabel1.setBackground(new Color(-1118482));
-		jLabel1.setBounds(179, 138, 198, 148);
+		jLabel1.setBounds(0, 0, 300, 240);
 		panel.add(jLabel1);
 	}
 }
@@ -903,10 +945,20 @@ class RankingPopup extends JFrame {
 	public RankingPopup() {
 
 		setTitle("Magician Of Code");
-		setBounds(235, 174, 342, 187);
+		setBounds(235, 174, 430, 315);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
-		panel = new JPanel();
+		ImageIcon icon = new ImageIcon("C:\\photoshop\\rankingP.png"); // 넣을 그림
+		Image img = icon.getImage();
+
+		panel = new JPanel() {
+			public void paintComponent(Graphics g) { // 페인트 컴포넌트 함수로 jpanel에 넣음
+				g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+				setOpaque(false);
+				super.paintComponent(g);
+			}
+		};
 		panel.setLayout(null);
 
 		makeComponent();
@@ -916,7 +968,6 @@ class RankingPopup extends JFrame {
 
 	public void makeComponent() {
 		jLabel1 = new JLabel();
-		jLabel1.setText("이름을 입력하세요!");
 		jLabel1.setFont(new Font("Dialog.plain", 0, 12));
 		jLabel1.setIcon(new ImageIcon(""));
 		jLabel1.setForeground(new Color(-13421773));
@@ -926,17 +977,19 @@ class RankingPopup extends JFrame {
 
 		jTextField1 = new JTextField();
 		jTextField1.setFont(new Font("Dialog.plain", 0, 12));
+		jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 		jTextField1.setForeground(new Color(-13421773));
 		jTextField1.setBackground(new Color(-1));
-		jTextField1.setBounds(55, 74, 132, 25);
+		jTextField1.setBounds(150, 177, 132, 25);
 		panel.add(jTextField1);
 
 		jButton1 = new JButton();
-		jButton1.setText("확인");
 		jButton1.setFont(new Font("Dialog.plain", 0, 12));
-		jButton1.setIcon(new ImageIcon(""));
-		jButton1.setForeground(new Color(-13421773));
-		jButton1.setBounds(208, 70, 80, 33);
+		jButton1.setIcon(new ImageIcon("C:\\photoshop\\ok.png"));
+		jButton1.setBackground(Color.WHITE);
+		jButton1.setOpaque(false);
+		jButton1.setBorderPainted(false);
+		jButton1.setBounds(180, 215, 80, 33);
 		ActionListener listener1 = new RankingRegisterButton(this);
 		jButton1.addActionListener(listener1);
 		panel.add(jButton1);
@@ -974,8 +1027,18 @@ class RankingScreen extends JFrame {
 		setTitle("Magician Of Code");
 		setBounds(141, 33, 527, 585);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
-		panel = new JPanel();
+		ImageIcon icon = new ImageIcon("C:\\photoshop\\rankingS.png"); // 넣을 그림
+		Image img = icon.getImage();
+
+		panel = new JPanel() {
+			public void paintComponent(Graphics g) { // 페인트 컴포넌트 함수로 jpanel에 넣음
+				g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+				setOpaque(false);
+				super.paintComponent(g);
+			}
+		};
 		panel.setLayout(null);
 
 		makeComponent();
@@ -986,7 +1049,6 @@ class RankingScreen extends JFrame {
 	public void makeComponent() {
 
 		jLabel1 = new JLabel();
-		jLabel1.setText("Ranking");
 		jLabel1.setFont(new Font("Dialog.plain", 0, 35));
 		jLabel1.setIcon(new ImageIcon(""));
 		jLabel1.setForeground(new Color(-13421773));
@@ -1003,36 +1065,40 @@ class RankingScreen extends JFrame {
 		panel.add(jTextField1);
 
 		jButton1 = new JButton();
-		jButton1.setText("나가기");
 		jButton1.setFont(new Font("Dialog.plain", 0, 12));
-		jButton1.setIcon(new ImageIcon(""));
-		jButton1.setForeground(new Color(-13421773));
-		jButton1.setBounds(400, 500, 102, 37);
+		jButton1.setIcon(new ImageIcon("C:\\photoshop\\랭킹나가기.png"));
+		jButton1.setBackground(Color.WHITE);
+		jButton1.setOpaque(false);
+		jButton1.setBorderPainted(false);
+		jButton1.setBounds(395, 485, 102, 37);
 		ActionListener listener1 = new FinalScreenButton(this, num);
 		jButton1.addActionListener(listener1);
 		panel.add(jButton1);
 
 		jButton2 = new JButton();
-		jButton2.setText("상");
 		jButton2.setFont(new Font("Dialog.plain", 0, 12));
-		jButton2.setIcon(new ImageIcon(""));
-		jButton2.setForeground(new Color(-13421773));
+		jButton2.setIcon(new ImageIcon("C:\\photoshop\\랭킹상.png"));
+		jButton2.setBackground(Color.WHITE);
+		jButton2.setOpaque(false);
+		jButton2.setBorderPainted(false);
 		jButton2.setBounds(332, 80, 50, 35);
 		panel.add(jButton2);
 
 		jButton3 = new JButton();
-		jButton3.setText("중");
 		jButton3.setFont(new Font("Dialog.plain", 0, 12));
-		jButton3.setIcon(new ImageIcon(""));
-		jButton3.setForeground(new Color(-13421773));
+		jButton3.setIcon(new ImageIcon("C:\\photoshop\\랭킹중.png"));
+		jButton3.setBackground(Color.WHITE);
+		jButton3.setOpaque(false);
+		jButton3.setBorderPainted(false);
 		jButton3.setBounds(381, 80, 50, 35);
 		panel.add(jButton3);
 
 		jButton4 = new JButton();
-		jButton4.setText("하");
 		jButton4.setFont(new Font("Dialog.plain", 0, 12));
-		jButton4.setIcon(new ImageIcon(""));
-		jButton4.setForeground(new Color(-13421773));
+		jButton4.setIcon(new ImageIcon("C:\\photoshop\\랭킹하.png"));
+		jButton4.setBackground(Color.WHITE);
+		jButton4.setOpaque(false);
+		jButton4.setBorderPainted(false);
 		jButton4.setBounds(430, 80, 50, 35);
 		panel.add(jButton4);
 	}
@@ -1078,7 +1144,6 @@ class FinalScreenButton implements ActionListener {
 	}
 }
 
-
 class FinalScreen extends JFrame {
 	JPanel panel;
 
@@ -1089,17 +1154,19 @@ class FinalScreen extends JFrame {
 		setTitle("Magician Of Code");
 		setBounds(125, 30, 870, 570);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
-		ImageIcon icon = new ImageIcon("C:\\photoshop\\lastscreen.png"); // 넣을 그림
-        Image img =icon.getImage();
-        
-        panel = new JPanel() {
-            public void paintComponent(Graphics g) { // 페인트 컴포넌트 함수로 jpanel에 넣음
-                g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
-                setOpaque(false); 
-                super.paintComponent(g);
-            }
-        };
+		ImageIcon icon = new ImageIcon("C:\\photoshop\\lastscreen.png"); // 넣을
+																			// 그림
+		Image img = icon.getImage();
+
+		panel = new JPanel() {
+			public void paintComponent(Graphics g) { // 페인트 컴포넌트 함수로 jpanel에 넣음
+				g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+				setOpaque(false);
+				super.paintComponent(g);
+			}
+		};
 		panel.setLayout(null);
 
 		makeComponent();
@@ -1130,7 +1197,8 @@ class FinalScreen extends JFrame {
 		jButton2.addActionListener(listener2);
 		panel.add(jButton2);
 
-		jButton3 = new JButton();;
+		jButton3 = new JButton();
+		;
 		jButton3.setFont(new Font("Dialog.plain", 0, 12));
 		jButton3.setIcon(new ImageIcon("C:\\photoshop\\ranking.png"));
 		jButton3.setBackground(Color.WHITE);
@@ -1223,7 +1291,7 @@ class RetryScreen extends LevelLowScreen {
 	public RetryScreen() {
 
 		makeComponent5();
-		
+
 		panel.remove(image);
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\retry.png"); // 넣을 그림
 
@@ -1265,6 +1333,7 @@ class RetryScreen extends LevelLowScreen {
 		// jButton4.addActionListener(listener4);
 	}
 }
+
 class SolutionScreen extends JFrame {
 	JPanel panel;
 
@@ -1277,17 +1346,18 @@ class SolutionScreen extends JFrame {
 		setTitle("Magician Of Code");
 		setBounds(125, 30, 870, 570);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\solution.png"); // 넣을 그림
-        Image img =icon.getImage();
-        
-        panel = new JPanel() {
-            public void paintComponent(Graphics g) { // 페인트 컴포넌트 함수로 jpanel에 넣음
-                g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
-                setOpaque(false); 
-                super.paintComponent(g);
-            }
-        };
+		Image img = icon.getImage();
+
+		panel = new JPanel() {
+			public void paintComponent(Graphics g) { // 페인트 컴포넌트 함수로 jpanel에 넣음
+				g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+				setOpaque(false);
+				super.paintComponent(g);
+			}
+		};
 		panel.setLayout(null);
 
 		makeComponent();
@@ -1345,130 +1415,5 @@ public class test {
 	public static void main(String[] args) {
 		StartScreen1 GUI_Interface = new StartScreen1();
 		GUI_Interface.setVisible(true);
-	}
-}
-
-
-class QueParser{
-	String [][] QueArr;
-	String [] Tokenize;
-	String [] Answer;
-	int Que_number;
-	int isCorrect;
-	
-	
-	QueParser(String [][]example)
-	{
-		this.QueArr = example;
-		this.Answer = new String[3];
-		this.isCorrect=0;
-	}
-	
-	void QueProvider()
-	{
-//		String str = QueArr[0][1];
-		String str = "#include <stdio.h> void main ()"
-				+ "{ printf( \" Hello wolrd \" ) ;}";
-		int i=0,j=0;
-		int tmp;
-		Random rd = new Random();
-		StringTokenizer st = new StringTokenizer(str);
-		int[]temp = new int[st.countTokens()];
-		Tokenize = new String[st.countTokens()];
-	    while(st.hasMoreTokens())
-	    {
-	    	temp[i]=i;
-	    	Tokenize[i]=st.nextToken();
-	    	i++;
-	    }
-		for(i=0;i<st.countTokens();i++)
-		{
-			int des = rd.nextInt(st.countTokens());
-			tmp = temp[i];
-			temp[i]=temp[des];
-			temp[des]=tmp;
-		}
-		for(j=0;j<3;j++)
-		{
-			Answer[j]=Tokenize[temp[j]];
-			Tokenize[temp[j]]="(***)";
-		}
-	}
-	
-	int AnsCheck()
-	{
-		
-		return 1;
-	}
-	
-	void BonusQueProvider()
-	{
-		
-		
-	}
-}
-
-class PointChecker{
-	int StartPoint;
-	int HintPoint;
-	int PassPoint;
-	int LeftLifePoint;
-	int LeftTime;
-	int Level;
-	
-	PointChecker()
-	{
-		this.StartPoint = 100;
-	}
-	
-	int GetTotalScore()
-	{
-		if(Level==1)
-		{
-			return StartPoint + HintPoint + PassPoint + LeftLifePoint + (5*LeftTime);
-		}
-		else
-		{
-			return StartPoint + HintPoint + PassPoint + LeftLifePoint;
-		}
-	}
-	void MinusHint()
-	{
-		this.HintPoint -= 5;
-	}
-	void MinusPass()
-	{
-		this.PassPoint -= 10;
-	}
-	void MinusLife()
-	{
-		this.LeftLifePoint -= 10;
-	}
-	void SetLevel(int Button_value)
-	{
-		this.Level = Button_value;
-	}
-	void SetLeftTime(int UI_LeftTime)
-	{
-		this.LeftTime += UI_LeftTime;
-	}
-}
-
-class Blind extends QueParser{
-
-	Blind(String[][] example) {
-		super(example);
-		
-	}
-
-	void QueProvider()
-	{
-		
-		
-	}
-	
-	int AnsCheck()
-	{
-		return 1;
 	}
 }
