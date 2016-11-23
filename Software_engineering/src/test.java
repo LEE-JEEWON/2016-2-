@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 import java.util.StringTokenizer;
 
 import javax.swing.*;
@@ -148,18 +149,18 @@ class EndButton extends JFrame implements ActionListener {
 }
 
 class TutorialScreen extends JFrame {
-	JPanel panel;
+	public JPanel panel;
 
-	JLabel jLabel1, jLabel2, jLabel3;
+	public JLabel jLabel1, jLabel2, jLabel3;
 
-	JTextField jTextField1;
+	public JTextArea jTextField1;
 
-	JButton jButton1, jButton2, jButton3, jButton4, jButton5, jButton6;
-	JButton[] exButton = new JButton[12];
-	JButton[] life = new JButton[3];
+	public JButton jButton1, jButton2, jButton3, jButton4, jButton5, jButton6;
+	public JButton[] exButton = new JButton[12];
+	public JButton[] life = new JButton[3];
 
-	ActionListener listener1;
-	ActionListener listener2;
+	public ActionListener listener1;
+	public ActionListener listener2;
 
 	int exButtonCount = 0;
 
@@ -192,9 +193,9 @@ class TutorialScreen extends JFrame {
 	}
 
 	public void makeComponent() {
-		jTextField1 = new JTextField();
-		jTextField1.setText("문제문제문제");
-		jTextField1.setFont(new Font("Dialog.plain", 0, 12));
+		jTextField1 = new JTextArea();
+		jTextField1.setText("\n\n#include< *** > \nvoid *** () \n{\n ***(\" Hello Wolrd \");\n}");
+		jTextField1.setFont(new Font("Dialog.plain", 0, 17));
 		jTextField1.setBackground(new Color(255, 255, 255, 178));
 		jTextField1.setBounds(64, 59, 323, 454);
 		panel.add(jTextField1);
@@ -315,7 +316,12 @@ class TutorialScreen extends JFrame {
 		exButton[0].setBounds(407, 150, 134, 56);
 		exButton[1].setBounds(552, 150, 134, 56);
 		exButton[2].setBounds(697, 150, 134, 56);
+		
+		exButton[0].setText("stdio.h");
+		exButton[1].setText("main");
+		exButton[2].setText("printf");
 	}
+
 }
 
 class Time implements Runnable {
@@ -443,7 +449,7 @@ class LevelChoiceScreen1 extends JFrame {
 
 	JButton jButton1, jButton2, jButton3;
 
-	public LevelChoiceScreen1() {
+	public LevelChoiceScreen1() {  // 레벨 선택하는 화면
 
 		setTitle("Magician Of Code");
 		setBounds(125, 30, 860, 560);
@@ -553,7 +559,8 @@ class LevelLowScreen extends TutorialScreen {
 	int remainHintCount = 3;
 	int remainPassCount = 3;
 	int remainLifeCount = 3;
-
+	QueParser LowLevel;
+	PointChecker Low_checker;
 	JLabel image;
 	
 	ActionListener listener3, listener4;
@@ -561,7 +568,10 @@ class LevelLowScreen extends TutorialScreen {
 	public LevelLowScreen() {
 		
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\game1.png"); // 넣을 그림
-
+		
+		LowLevel = new QueParser();  		// 객체 생성
+		Low_checker = new PointChecker();
+		
 		image = new JLabel(icon);
 		image.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
 		panel.add(image);
@@ -573,6 +583,13 @@ class LevelLowScreen extends TutorialScreen {
 
 	public void makeComponent2() {
 
+//		jTextField1.setText(LowLevel.Tokenize[1]);  // 왜 에러 뜨는지 알아낼것!!
+//		for(int i=0;LowLevel.Tokenize[i]!=null;i++)
+//		{
+//			if(LowLevel.Tokenize[i]=="{" || LowLevel.Tokenize[i]=="}" || LowLevel.Tokenize[i]==";")
+//				 jTextField1.append("\n");
+//		    jTextField1.append(LowLevel.Tokenize[i]); // lowlevel 문제 추가
+//		}
 		jButton2.removeActionListener(listener2);
 		ActionListener listener2 = new CheckButton(this, 0);
 		jButton2.addActionListener(listener2);
@@ -603,16 +620,20 @@ class LevelLowScreen extends TutorialScreen {
 		exButton[10].setBounds(552, 240, 134, 56);
 		exButton[11].setBounds(697, 240, 134, 56);
 	}
+	
+	
+	
 }
 
 class HintButton implements ActionListener {
 
 	public HintButton() {
-
+		
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		// 힌트 기능
+		// 힌트 사용시 출력 해줌
+		
 	}
 }
 
@@ -623,14 +644,14 @@ class PassButton implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		// 패스 기능
+		// 패스 기능, 인스턴스 추가 요망
 	}
 }
 
 class CheckButton implements ActionListener {  // 여기서 맞는지 틀린지 확인하는 로직
 	TutorialScreen tutorialScreen;
 	LevelLowScreen levelLowScreen;
-
+    
 	int num = 0;
 
 	boolean right = false;
@@ -655,10 +676,11 @@ class CheckButton implements ActionListener {  // 여기서 맞는지 틀린지 확인하는 
 
 		else { // 게임화면에서 넘어온 경우
 				// 선택한 보기와 답을 비교
+			
 
 			if (right == true) { // 정답을 맞춘 경우
 				// 다음문제 출제 함수
-
+				
 				// 끝가지 성공했을 경우 조건 확인 후
 				levelLowScreen.setVisible(false);
 				SuccessScreen successScreen = new SuccessScreen();
@@ -674,7 +696,7 @@ class CheckButton implements ActionListener {  // 여기서 맞는지 틀린지 확인하는 
 			}
 		}
 	}
-}
+} 
 
 class Life {
 	JButton[] life;
@@ -736,7 +758,7 @@ class LevelMiddleScreen extends LevelLowScreen {
 	}
 }
 
-class Timer implements Runnable {
+class Timer implements Runnable {   // 쓰레드의 경우 놔둘것, 타이머니깐
 	JButton[] restTime;
 
 	public Timer(JButton[] restTime) {
@@ -1336,45 +1358,105 @@ public class test {
 	}
 }
 
-//
-//class QueParser{
-//	String [][] QueArr;
-//	String [] Tokenize;
-//	int isCorrect;
-//	
-//	
+
+class QueParser{
+	String [][] QueArr;
+	String [] Tokenize;
+	String [] Answer;
+	int Que_number;
+	int isCorrect;
+	
+	
 //	QueParser(String [][]example)
 //	{
 //		this.QueArr = example;
-//		
+//		this.Answer = new String[3];
+//		this.isCorrect=0;
 //	}
-//	
-//	String QueProvider()
-//	{
-////		String str = QueArr[0][1];
-//		String str = "#include <stdio.h> void main ()"
-//				+ "{ printf( \" Hello wolrd \" ) ;}";
-//		int i;
-//		StringTokenizer st = new StringTokenizer(str);
-//		String []Arr = new String[st.countTokens()];
-//	    for(i = 0; i)
-//		
-//		
-//		
-//		return ;
-//	}
-//	
-//	String AnsCheck()
-//	{
-//		
-//	}
-//	
-//	String BonusQueProvider()
-//	{
-//		
-//		return ;
-//	}
-//}
+	
+	QueParser()
+	{
+		this.Answer = new String[3];
+		this.isCorrect=0;
+	}
+	
+	void QueProvider()
+	{
+//		String str = QueArr[0][1];
+		String str = "#include <stdio.h> void main ()"
+				+ "{ printf( \" Hello wolrd \" ) ;}";
+		int i=0,j=0;
+		int tmp;
+		Random rd = new Random();
+		StringTokenizer st = new StringTokenizer(str);
+		int[]temp = new int[st.countTokens()];
+		Tokenize = new String[st.countTokens()];
+	    while(st.hasMoreTokens())
+	    {
+	    	temp[i]=i;
+	    	Tokenize[i]=st.nextToken();
+	    	i++;
+	    }
+		for(i=0;i<st.countTokens();i++)
+		{
+			int des = rd.nextInt(st.countTokens());
+			tmp = temp[i];
+			temp[i]=temp[des];
+			temp[des]=tmp;
+		}
+		for(j=0;j<3;j++)
+		{
+			Answer[j]=Tokenize[temp[j]];
+			Tokenize[temp[j]]="(***)";
+		}
+	}
+	
+	int AnsCheck()
+	{
+		
+		if(isCorrect==1)
+		{
+			isCorrect = 0;
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	void BonusQueProvider()
+	{
+//		String str = QueArr[0][1];
+		String str = "#include <stdio.h> void main ()"
+				+ "{ printf( \" Hello wolrd \" ) ;}";
+		int i=0,j=0;
+		int tmp;
+		Random rd = new Random();
+		StringTokenizer st = new StringTokenizer(str);
+		int[]temp = new int[st.countTokens()];
+		Tokenize = new String[st.countTokens()];
+	    while(st.hasMoreTokens())
+	    {
+	    	temp[i]=i;
+	    	Tokenize[i]=st.nextToken();
+	    	i++;
+	    }
+		for(i=0;i<st.countTokens();i++)
+		{
+			int des = rd.nextInt(st.countTokens());
+			tmp = temp[i];
+			temp[i]=temp[des];
+			temp[des]=tmp;
+		}
+		for(j=0;j<3;j++)
+		{
+			Answer[j]=Tokenize[temp[j]];
+			Tokenize[temp[j]]="(***)";
+		}
+		
+	}
+}
 
 class PointChecker{
 	int StartPoint;
@@ -1421,22 +1503,62 @@ class PointChecker{
 		this.LeftTime += UI_LeftTime;
 	}
 }
-//
-//class Blind extends QueParser{
-//	String [][] QueArr;
-//	String [] Tokenize;
-//	Blind()
-//	{
-//		
-//	}
-//	String QueProvider()
-//	{
-//		
-//		return ;
-//	}
-//	
-//	String AnsCheck()
-//	{
-//		
-//	}
-//}
+
+class Blind extends QueParser{
+
+	Blind()
+	{
+		this.Answer = new String[3];
+		this.isCorrect=0;
+	}
+	
+	void QueProvider()
+	{
+//		String str = QueArr[0][1];
+		String str = "#include <stdio.h> void main ()"
+				+ "{ printf( \" Hello wolrd \" ) ;}";
+		int i=0,j=0;
+		int tmp;
+		Random rd = new Random();
+		StringTokenizer st = new StringTokenizer(str);
+		int[]temp = new int[st.countTokens()];
+		Tokenize = new String[st.countTokens()];
+	    while(st.hasMoreTokens())
+	    {
+	    	temp[i]=i;
+	    	Tokenize[i]=st.nextToken();
+	    	i++;
+	    }
+		for(i=0;i<st.countTokens();i++)
+		{
+			int des = rd.nextInt(st.countTokens());
+			tmp = temp[i];
+			temp[i]=temp[des];
+			temp[des]=tmp;
+		}
+		for(j=0;j<3;j++)
+		{
+			Answer[j]=Tokenize[temp[j]];
+			Tokenize[temp[j]]="(***)";
+		}
+		for(j=4;j<st.countTokens();j++)
+		{
+			Tokenize[temp[j]]="(BLIND!)";
+		}
+	}
+	
+	int AnsCheck()
+	{
+		
+		if(isCorrect==1)
+		{
+			isCorrect = 0;
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+}
