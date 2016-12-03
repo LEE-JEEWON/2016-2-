@@ -2,22 +2,16 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Random;
-import java.util.StringTokenizer;
 
 import javax.swing.*;
+import javazoom.jl.decoder.*;
+import javazoom.jl.player.*;
 
 import java.sql.*;
 import java.util.Random;
-import java.util.Scanner;
-
-/**
- * @brief ÇÁ·Î±×·¥ ½ÇÇà½Ã ³ªÅ¸³ª´Â È­¸é Å¬·¡½ºÀÔ´Ï´Ù.
- * @details ¾²·¹µå¸¦ È£ÃâÇÏ¿© 2ÃÊ ÈÄ¿¡ ´ÙÀ½È­¸éÀ¸·Î ³Ñ¾î°¡°Ô ÇÕ´Ï´Ù.
- * @author ¼Ò°ø 2Á¶ ÄÚµåÀÇ¸¶¹ı»ç
- * @date 2016-11-26
- * @version 0.0.1
- */
 
 class StartScreen1 extends JFrame {
 	JPanel panel;
@@ -50,54 +44,39 @@ class StartScreen1 extends JFrame {
 	}
 }
 
-/**
- * @brief Ã¹ È­¸éÀ» ³Ñ±â´Â ¾²·¹µå Å¬·¡½ºÀÔ´Ï´Ù.
- * @details run()ÇÔ¼ö¸¦ ½ÇÇàÇÏ¿© 2ÃÊµÚ ´ÙÀ½ È­¸éÀ¸·Î ³Ñ¾î°¡°ÔÇÕ´Ï´Ù.
- * @author ¼Ò°ø 2Á¶ ÄÚµåÀÇ¸¶¹ı»ç
- * @date 2016-11-26
- * @version 0.0.1
- */
-
 class StartScreenFlash implements Runnable {
-	StartScreen1 startScreen1;
+	   StartScreen1 startScreen1;
+	   String path;
 
-	public StartScreenFlash(StartScreen1 startScreen1) {
-		this.startScreen1 = startScreen1;
+	   public StartScreenFlash(StartScreen1 startScreen1) {
+	      this.startScreen1 = startScreen1;
+	      path = "C:\\photoshop\\bgm.mp3";
+	   }
+
+	   public void run() {
+	      try {
+	         Thread.sleep(2000);
+	         startScreen1.setVisible(false);
+	         StartScreen2 startScreen2 = new StartScreen2();
+	         startScreen2.setVisible(true);
+	         try
+	         {
+	            do{
+	               Player p = new Player(new FileInputStream(path));
+	               p.play();
+	               p.close();
+	               }
+	            while(true);
+	         }
+	         catch(Exception e)
+	         {
+	            e.printStackTrace();
+	         }
+	      } catch (InterruptedException e) {
+	         e.printStackTrace();
+	      }
+	   }
 	}
-
-	/**
-	 * @brief ¾²·¹µå ½ÇÇà ÇÔ¼öÀÔ´Ï´Ù.
-	 * @details 2ÃÊµÚ ´ÙÀ½ È­¸éÀ¸·Î ³Ñ¾î°¡°Ô ÇÕ´Ï´Ù.
-	 * @param
-	 * @return
-	 * 
-	 * @bug
-	 * @TODO
-	 * @exception
-	 * 
-	 * 				@see
-	 * @see
-	 */
-
-	public void run() {
-		try {
-			Thread.sleep(2000);
-			startScreen1.setVisible(false);
-			StartScreen2 startScreen2 = new StartScreen2();
-			startScreen2.setVisible(true);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-}
-
-/**
- * @brief °ÔÀÓÀ» ½ÃÀÛÇÏ±â Àü Å¬·¡½ºÀÔ´Ï´Ù.
- * @details °ÔÀÓ ½ÃÀÛ, ·©Å· º¸±â, ³¡³»±â¸¦ ¼±ÅÃÇÒ ¼ö ÀÖ´Â Å¬·¡½ºÀÔ´Ï´Ù.
- * @author ¼Ò°ø 2Á¶ ÄÚµåÀÇ¸¶¹ı»ç
- * @date 2016-11-26
- * @version 0.0.1
- */
 
 class StartScreen2 extends JFrame {
 	JPanel panel;
@@ -160,14 +139,6 @@ class StartScreen2 extends JFrame {
 	}
 }
 
-/**
- * @brief
- * @details °ÔÀÓ½ÃÀÛ ¹öÆ°ÀÇ ÀÌº¥Æ® Å¬·¡½ºÀÔ´Ï´Ù.
- * @author ¼Ò°ø 2Á¶ ÄÚµåÀÇ¸¶¹ı»ç
- * @date 2016-11-26
- * @version 0.0.1
- */
-
 class StartButton implements ActionListener {
 	StartScreen2 StartScreen2;
 
@@ -192,7 +163,8 @@ class EndButton extends JFrame implements ActionListener {
 class TutorialScreen extends JFrame {
 	JPanel panel;
 
-	JLabel jLabel1, jLabel2, jLabel3;
+	PointChecker pointChecker = new PointChecker(this);
+	JLabel jLabel1, jLabel2, jLabel3, jLabel4;
 	JLabel image3;
 
 	ImageIcon icon3;
@@ -262,43 +234,50 @@ class TutorialScreen extends JFrame {
 			}
 		};
 		jTextArea1.setText(
-				"\n\n\n Hello, World!¸¦ Ãâ·ÂÇÏ±â À§ÇØ ´ÙÀ½ ÄÚµå¸¦ ¿Ï¼ºÇÏ½Ã¿À." + " \n\n\n #include <stdio.h> " + "\n\nint main() { "
+				"\n\n\n Hello, World!ë¥¼ ì¶œë ¥í•˜ê¸° ìœ„í•´ ë‹¤ìŒ ì½”ë“œë¥¼ ì™„ì„±í•˜ì‹œì˜¤." + " \n\n\n #include <stdio.h> " + "\n\nint main() { "
 						+ "\n          (          )(\"Hello, World!\");" + "\n          return 0;" + "\n}");
 		jTextArea1.setFont(new Font("Dialog.plain", 0, 12));
 		jTextArea1.setBackground(new Color(255, 255, 255, 178));
 		jTextArea1.setBorder(null);
 		jTextArea1.setBounds(75, 59, 323, 454);
+		jTextArea1.setFocusable(false);
 		panel.add(jTextArea1);
 
 		jTextArea2 = new JTextArea();
-		jTextArea2.setText("¾È³ç? ³ª´Â µµ·Î½Ã¾ß\nÄÚµåÀÇ ¸¶¹ı»ç¸¦ Ã£À¸·¯ ¿Ô±¸³ª!");
-		jTextArea2.setFont(new Font("¸¼Àº°íµñ", Font.BOLD, 35));
+		jTextArea2.setText("ì•ˆë…•? ë‚˜ëŠ” ë„ë¡œì‹œì•¼\nì½”ë“œì˜ ë§ˆë²•ì‚¬ë¥¼ ì°¾ìœ¼ëŸ¬ ì™”êµ¬ë‚˜!");
+		jTextArea2.setFont(new Font("ë§‘ì€ê³ ë”•", Font.BOLD, 35));
 		jTextArea2.setOpaque(false);
 		jTextArea2.setBorder(null);
 		jTextArea2.setBounds(190, 530, 680, 90);
 		panel.add(jTextArea2);
 
-		jLabel1 = new JLabel(); // ½Ã°£ ÃÊ ´ÜÀ§
+		jLabel1 = new JLabel(); // ì‹œê°„ ì´ˆ ë‹¨ìœ„
 		jLabel1.setText("00");
-		jLabel1.setFont(new Font("¸¼Àº°íµñ", Font.BOLD, 20));
+		jLabel1.setFont(new Font("ë§‘ì€ê³ ë”•", Font.BOLD, 20));
 		jLabel1.setBounds(635, 19, 30, 20);
 		panel.add(jLabel1);
 
-		jLabel2 = new JLabel(); // ½Ã°£ ºĞ ´ÜÀ§
+		jLabel2 = new JLabel(); // ì‹œê°„ ë¶„ ë‹¨ìœ„
 		jLabel2.setText("00");
-		jLabel2.setFont(new Font("¸¼Àº°íµñ", Font.BOLD, 20));
+		jLabel2.setFont(new Font("ë§‘ì€ê³ ë”•", Font.BOLD, 20));
 		jLabel2.setBounds(595, 19, 30, 20);
 		panel.add(jLabel2);
 
 		jLabel3 = new JLabel();
 		jLabel3.setText(":");
-		jLabel3.setFont(new Font("¸¼Àº°íµñ", Font.BOLD, 20));
+		jLabel3.setFont(new Font("ë§‘ì€ê³ ë”•", Font.BOLD, 20));
 		jLabel3.setBounds(623, 18, 10, 21);
 		panel.add(jLabel3);
 
+		jLabel4 = new JLabel();
+		jLabel4.setText(String.valueOf(pointChecker.GetTotalScore()));
+		jLabel4.setFont(new Font("ë§‘ì€ê³ ë”•", Font.BOLD, 30));
+		jLabel4.setBounds(480, 18, 100, 30);
+		panel.add(jLabel4);
+
 		for (int i = 0; i < 12; i++) {
 			exButton[i] = new JButton();
-			exButton[i].setText("º¸±â" + (i + 1));
+			exButton[i].setText("ë³´ê¸°" + (i + 1));
 			exButton[i].setFont(new Font("Dialog.plain", 0, 12));
 			exButton[i].setBackground(new Color(255, 255, 255, 250));
 			listener = new ExButtonMoving(this, i, exam);
@@ -351,7 +330,7 @@ class TutorialScreen extends JFrame {
 		panel.add(jButton5);
 
 		jButton6 = new JButton();
-		jButton6.setIcon(new ImageIcon("C:\\photoshop\\È­»ìÇ¥.png"));
+		jButton6.setIcon(new ImageIcon("C:\\photoshop\\í™”ì‚´í‘œ.png"));
 		jButton6.setBackground(Color.WHITE);
 		jButton6.setOpaque(false);
 		jButton6.setBorderPainted(false);
@@ -361,7 +340,7 @@ class TutorialScreen extends JFrame {
 		panel.add(jButton6);
 
 		jButton7 = new JButton();
-		jButton7.setIcon(new ImageIcon("C:\\photoshop\\¹ØÈ­»ìÇ¥.png"));
+		jButton7.setIcon(new ImageIcon("C:\\photoshop\\ë°‘í™”ì‚´í‘œ.png"));
 		jButton7.setBackground(Color.WHITE);
 		jButton7.setOpaque(false);
 		jButton7.setBorderPainted(false);
@@ -413,43 +392,43 @@ class NextButton implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (num++) {
 		case 0:
-			tutorialScreen.jTextArea2.setText("°ÔÀÓ ¹æ¹ıÀ» ¼³¸íÇØÁÙ°Ô!\nµû¶ó ÇØºÁ!!");
+			tutorialScreen.jTextArea2.setText("ê²Œì„ ë°©ë²•ì„ ì„¤ëª…í•´ì¤„ê²Œ!\në”°ë¼ í•´ë´!!");
 			break;
 		case 1:
-			tutorialScreen.jTextArea2.setText("¹®Á¦¿Í º¸±â°¡ º¸ÀÌ´Ï??\n¹®Á¦¸¦ ÀĞ°í º¸±â¸¦ Å¬¸¯ÇØºÁ!");
+			tutorialScreen.jTextArea2.setText("ë¬¸ì œì™€ ë³´ê¸°ê°€ ë³´ì´ë‹ˆ??\në¬¸ì œë¥¼ ì½ê³  ë³´ê¸°ë¥¼ í´ë¦­í•´ë´!");
 			tutorialScreen.jButton7.setVisible(true);
 			break;
 		case 2:
 			tutorialScreen.jButton7.setBounds(540, 455, 77, 71);
-			tutorialScreen.jButton7.setIcon(new ImageIcon("C:\\photoshop\\¿ìÈ­»ìÇ¥.png"));
-			tutorialScreen.jTextArea2.setText("¼±ÅÃÇÑ º¸±âÀÇ À§Ä¡°¡ º¯ÇßÁö!?\nRESET¹öÆ°À» Å¬¸¯ÇØºÁ!");
+			tutorialScreen.jButton7.setIcon(new ImageIcon("C:\\photoshop\\ìš°í™”ì‚´í‘œ.png"));
+			tutorialScreen.jTextArea2.setText("ì„ íƒí•œ ë³´ê¸°ì˜ ìœ„ì¹˜ê°€ ë³€í–ˆì§€!?\nRESETë²„íŠ¼ì„ í´ë¦­í•´ë´!");
 			break;
 		case 3:
 			tutorialScreen.jButton7.setVisible(false);
-			tutorialScreen.jTextArea2.setText("º¸±â°¡ ¿ø·¡´ë·Î µ¹¾Æ¿ÔÁö!?");
+			tutorialScreen.jTextArea2.setText("ë³´ê¸°ê°€ ì›ë˜ëŒ€ë¡œ ëŒì•„ì™”ì§€!?");
 			break;
 		case 4:
-			tutorialScreen.jTextArea2.setText("HINT¹öÆ°Àº ¹®Á¦¸¦ Ç®´Ù°¡ \nÁ¤´ä ÇÏ³ª¸¦ ¾Ë°í ½ÍÀ» ¶§ ¾²´Â ¹öÆ°ÀÌ¾ß!");
+			tutorialScreen.jTextArea2.setText("HINTë²„íŠ¼ì€ ë¬¸ì œë¥¼ í’€ë‹¤ê°€ \nì •ë‹µ í•˜ë‚˜ë¥¼ ì•Œê³  ì‹¶ì„ ë•Œ ì“°ëŠ” ë²„íŠ¼ì´ì•¼!");
 			tutorialScreen.jButton7.setBounds(672, 290, 77, 71);
 			tutorialScreen.jButton7.setVisible(true);
 			break;
 		case 5:
 			tutorialScreen.jButton7.setBounds(672, 340, 77, 71);
-			tutorialScreen.jTextArea2.setText("PASS¹öÆ°Àº ¹®Á¦¸¦ Ç®´Ù°¡ ÀÌ ¹®Á¦¸¦\n³Ñ¾î°¡°í ½ÍÀ» ¶§ ¾²´Â ¹öÆ°ÀÌ¾ß!");
+			tutorialScreen.jTextArea2.setText("PASSë²„íŠ¼ì€ ë¬¸ì œë¥¼ í’€ë‹¤ê°€ ì´ ë¬¸ì œë¥¼\në„˜ì–´ê°€ê³  ì‹¶ì„ ë•Œ ì“°ëŠ” ë²„íŠ¼ì´ì•¼!");
 			break;
 		case 6:
 			tutorialScreen.jButton7.setVisible(false);
-			tutorialScreen.jTextArea2.setText("±×·³ ÀÌÁ¦ ´äÀ» °ñ¶óº¸·Å!");
+			tutorialScreen.jTextArea2.setText("ê·¸ëŸ¼ ì´ì œ ë‹µì„ ê³¨ë¼ë³´ë ´!");
 			break;
 		case 7:
 			tutorialScreen.jButton7.setBounds(745, 400, 77, 71);
-			tutorialScreen.jButton7.setIcon(new ImageIcon("C:\\photoshop\\¹ØÈ­»ìÇ¥.png"));
+			tutorialScreen.jButton7.setIcon(new ImageIcon("C:\\photoshop\\ë°‘í™”ì‚´í‘œ.png"));
 			tutorialScreen.jButton7.setVisible(true);
-			tutorialScreen.jTextArea2.setText("prinf¸¦ °ñ¶úÁö?? \nCHECK ¹öÆ°À¸·Î ´äÀ» È®ÀÎÇÒ ¼ö ÀÖ¾î!");
+			tutorialScreen.jTextArea2.setText("prinfë¥¼ ê³¨ëì§€?? \nCHECK ë²„íŠ¼ìœ¼ë¡œ ë‹µì„ í™•ì¸í•  ìˆ˜ ìˆì–´!");
 			break;
 		case 8:
 			tutorialScreen.jButton7.setVisible(false);
-			tutorialScreen.jTextArea2.setText("³» ¼³¸íÀº ¿©±â±îÁö¾ß \nCHECK¹öÆ°À» ´­·¯ ´ÙÀ½À¸·Î ³Ñ¾î°¡!");
+			tutorialScreen.jTextArea2.setText("ë‚´ ì„¤ëª…ì€ ì—¬ê¸°ê¹Œì§€ì•¼ \ní™”ì‚´í‘œë²„íŠ¼ì„ ëˆŒëŸ¬ ë‹¤ìŒìœ¼ë¡œ ë„˜ì–´ê°€!");
 			break;
 		case 9:
 			tutorialScreen.setVisible(false);
@@ -513,24 +492,26 @@ class ExButtonMoving implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		tutorialScreen.image3.setVisible(false);
-		switch (tutorialScreen.exButtonCount) {
-		case 0:
-			tutorialScreen.exButton[i].setBounds(407, 405, tutorialScreen.exButton[i].getWidth(),
-					tutorialScreen.exButton[i].getHeight());
-			exam[0] = tutorialScreen.exButton[i].getText();
-			break;
-		case 1:
-			tutorialScreen.exButton[i].setBounds(551, 405, tutorialScreen.exButton[i].getWidth(),
-					tutorialScreen.exButton[i].getHeight());
-			exam[1] = tutorialScreen.exButton[i].getText();
-			break;
-		case 2:
-			tutorialScreen.exButton[i].setBounds(697, 405, tutorialScreen.exButton[i].getWidth(),
-					tutorialScreen.exButton[i].getHeight());
-			exam[2] = tutorialScreen.exButton[i].getText();
-			break;
+		if (tutorialScreen.exButton[i].getY() != 405) {
+			switch (tutorialScreen.exButtonCount) {
+			case 0:
+				tutorialScreen.exButton[i].setBounds(407, 405, tutorialScreen.exButton[i].getWidth(),
+						tutorialScreen.exButton[i].getHeight());
+				exam[0] = tutorialScreen.exButton[i].getText();
+				break;
+			case 1:
+				tutorialScreen.exButton[i].setBounds(551, 405, tutorialScreen.exButton[i].getWidth(),
+						tutorialScreen.exButton[i].getHeight());
+				exam[1] = tutorialScreen.exButton[i].getText();
+				break;
+			case 2:
+				tutorialScreen.exButton[i].setBounds(697, 405, tutorialScreen.exButton[i].getWidth(),
+						tutorialScreen.exButton[i].getHeight());
+				exam[2] = tutorialScreen.exButton[i].getText();
+				break;
+			}
+			tutorialScreen.exButtonCount++;
 		}
-		tutorialScreen.exButtonCount++;
 	}
 }
 
@@ -542,6 +523,7 @@ class ResetButton implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		tutorialScreen.image3.setVisible(false);
 		tutorialScreen.setExButton();
 		tutorialScreen.exButtonCount = 0;
 	}
@@ -651,6 +633,7 @@ class LevelChoiceButton implements ActionListener {
 	LevelChoiceScreen1 levelChoiceScreen1;
 	int level = 0;
 	QueParser Que;
+	Blind HighQue;
 
 	public LevelChoiceButton(LevelChoiceScreen1 levelChoiceScreen1, int level) {
 		this.levelChoiceScreen1 = levelChoiceScreen1;
@@ -659,7 +642,7 @@ class LevelChoiceButton implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		switch (level) {
-		case 1: // dfdfd
+		case 1:
 			Que = new QueParser(1);
 			levelChoiceScreen1.setVisible(false);
 			LevelLowScreen levelLowScreen = new LevelLowScreen();
@@ -676,10 +659,10 @@ class LevelChoiceButton implements ActionListener {
 			levelMiddleScreen.setVisible(true);
 			break;
 		case 3:
-			Que = new QueParser(3);
+			HighQue = new Blind();
 			levelChoiceScreen1.setVisible(false);
 			LevelHighScreen levelHighScreen = new LevelHighScreen();
-			levelHighScreen.setQue(Que);
+			levelHighScreen.setQue(HighQue);
 			levelHighScreen.showQuestion();
 			levelHighScreen.setVisible(true);
 			break;
@@ -688,11 +671,20 @@ class LevelChoiceButton implements ActionListener {
 }
 
 class LevelLowScreen extends TutorialScreen {
+	int[] wrongQueNum = new int[6];
+	int wrongNum = 0;
 
-	int remainHintCount = 999;
-	int remainPassCount = 999;
+	String level = "í•˜";
+
+	int remainHintCount = 3;
+	int remainPassCount = 3;
 	int remainLifeCount = 3;
-	JLabel image;
+	int bonusCount = 1;
+	boolean isBonus = false;
+
+	JScrollPane jScrollPane;
+
+	JLabel image, bonusImage;
 	int QueNum;
 
 	JLabel image1;
@@ -704,12 +696,14 @@ class LevelLowScreen extends TutorialScreen {
 	int questionNum = 1;
 	int count = 1;
 
+	int timerCount = 0;
+	JButton[] restTime = new JButton[16];
 	ActionListener listener3, listener4;
-	
+
 	public void setQue(QueParser Que) {
 		this.Que = Que;
 		jButton2.removeActionListener(listener2);
-		ActionListener listener2 = new CheckButton(this, 1, Que, Point, exam, QueNum);
+		ActionListener listener2 = new CheckButton(this, Que, Point, exam, false);
 		jButton2.addActionListener(listener2);
 		jButton2.addActionListener(listener1);
 	}
@@ -744,7 +738,12 @@ class LevelLowScreen extends TutorialScreen {
 		jTextArea1.setBackground(new Color(255, 255, 255, 178));
 		jTextArea1.setBorder(null);
 		jTextArea1.setBounds(75, 59, 323, 454);
-		panel.add(jTextArea1);
+		jTextArea1.setLineWrap(true);
+		jTextArea1.setFocusable(false);
+		jScrollPane = new JScrollPane(jTextArea1);
+		jScrollPane.setBounds(75, 59, 323, 454);
+		jScrollPane.setBorder(null);
+		panel.add(jScrollPane);
 
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\game1.png");
 		image = new JLabel(icon);
@@ -792,52 +791,65 @@ class LevelLowScreen extends TutorialScreen {
 	}
 
 	public void showQuestion() {
-		int tm;
+
 		int arr[] = new int[12];
 		Random rdd = new Random();
+		boolean overwrap = false;
 
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < 12; i++)
 			arr[i] = i;
-		}
+
 		for (int i = 0; i < 12; i++) {
-			int dex = rdd.nextInt(12);
-			tm = arr[i];
-			arr[i] = arr[dex];
-			arr[dex] = tm;
+			int des = rdd.nextInt(12);
+			int temp = arr[i];
+			arr[i] = arr[des];
+			arr[des] = temp;
 		}
 
-		for (int i = 0, j = 0; i < 12; i++) { // º¸±â ¹öÆ° °ª ¼öÁ¤ 1111
-			if (i < 3) {
-				exButton[arr[i]].setText(Que.Answer[j++]);
-				ansNum[i] = arr[i];
-			} else {
-				if (j >= Que.Tokenize.length - 1)
-					j -= 4;
-				if (Que.Tokenize[j].equals("\\n") || Que.Tokenize[j].equals("_0_") || Que.Tokenize[j].equals("_1_")
-						|| Que.Tokenize[j].equals("_2_")) {
-					i--;
-					j++;
-					continue;
-				}
-				if (j >= Que.Tokenize.length - 1)
-					j -= 7;
-				exButton[arr[i]].setText(Que.Tokenize[j++]);
-			}
-		}
-		System.out.println("showQuestion : " + Que.Answer[0] + " " +
-		Que.Answer[1] + " " + Que.Answer[2]);
-		jTextArea1.setText(" ");
-		jTextArea1.append(questionNum + ". : " + Que.QueArr[questionNum - 1][1] + "\n");
-
-		for (int i = 0; i < Que.tokennumber; i++) {
-			if (Que.Tokenize[i].equals("\\n"))
-				jTextArea1.append("\n");
-			else
-				jTextArea1.append(Que.Tokenize[i]);
-		}
 		for (int i = 0; i < 3; i++) {
-			jTextArea1.append("\n\n" + i + "¹øÂ° ´ä : " + Que.Answer[i]);
+			exButton[arr[i]].setText((Que.Answer[i]));
+			ansNum[i] = arr[i];
 		}
+		for (int i = 3; i < 12; i++) {
+			if (i >= Que.count || Que.ex.size() == 0) {
+				exButton[arr[i]].setText("ë³´ë„ˆìŠ¤");
+				continue;
+			}
+
+			int num = rdd.nextInt(Que.ex.size());
+			if (Que.ex.get(num).equals(" ") || Que.ex.get(num).equals("") || Que.ex.get(num).equals("\n")
+					|| Que.ex.get(num).equals("}") || Que.ex.get(num).equals("{") || Que.ex.get(num).equals("\n{")
+					|| Que.ex.get(num).equals("\n}") || Que.ex.get(num).equals("\n\n")) {
+				Que.ex.remove(num);
+				i--;
+				continue;
+			}
+			
+
+			for (int j = 0; j < 12; j++) {
+				if (Que.ex.get(num).equals(exButton[j].getText())) {
+					Que.ex.remove(num);
+					i--;
+					overwrap = true;
+					break;
+				}
+			}
+			
+			if (overwrap == true) {
+				continue;
+			}
+			
+			overwrap = false;
+			exButton[arr[i]].setText((Que.ex.get(num)));
+			Que.ex.remove(num);
+		}
+		Que.count = 0;
+
+		jTextArea1.setText(" ");
+		jTextArea1.append(questionNum + ". " + Que.QueArr[questionNum - 1][1] + "\n");
+
+		for (int k = 0; k < Que.list.size(); k++)
+			jTextArea1.append(Que.list.get(k));
 	}
 }
 
@@ -853,31 +865,35 @@ class HintButton implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (screen.remainHintCount > 0) {
-			screen.remainHintCount--; // ÈùÆ® ·çÆ¾ Ãß°¡
-			switch (screen.exButtonCount) {
-			case 0:
-				screen.image3.setBounds(screen.exButton[screen.ansNum[0]].getX(),
-						screen.exButton[screen.ansNum[0]].getY() - 30, screen.icon3.getIconWidth(),
-						screen.icon3.getIconHeight());
-				screen.image3.setVisible(true);
-				break;
-			case 1:
-				screen.image3.setBounds(screen.exButton[screen.ansNum[1]].getX(),
-						screen.exButton[screen.ansNum[1]].getY() - 30, screen.icon3.getIconWidth(),
-						screen.icon3.getIconHeight());
-				screen.image3.setVisible(true);
-				break;
-			case 2:
-				screen.image3.setBounds(screen.exButton[screen.ansNum[2]].getX(),
-						screen.exButton[screen.ansNum[2]].getY() - 30, screen.icon3.getIconWidth(),
-						screen.icon3.getIconHeight());
-				screen.image3.setVisible(true);
-				break;
-			}
-			// Point.MinusHint();
-		} else
-			JOptionPane.showMessageDialog(null, "ÈùÆ® ´Ù ½è¾î¿ä.");
+		if (screen.image3.isVisible() == false) {
+			if (screen.remainHintCount > 0 && screen.exam[2] != null) {
+				JOptionPane.showMessageDialog(null, "ë‹µì•ˆ ì‘ì„± ì™„ë£Œ.");
+			} else if (screen.remainHintCount > 0) {
+				screen.remainHintCount--; // íŒíŠ¸ ë£¨í‹´ ì¶”ê°€
+				switch (screen.exButtonCount) {
+				case 0:
+					screen.image3.setBounds(screen.exButton[screen.ansNum[0]].getX(),
+							screen.exButton[screen.ansNum[0]].getY() - 30, screen.icon3.getIconWidth(),
+							screen.icon3.getIconHeight());
+					screen.image3.setVisible(true);
+					break;
+				case 1:
+					screen.image3.setBounds(screen.exButton[screen.ansNum[1]].getX(),
+							screen.exButton[screen.ansNum[1]].getY() - 30, screen.icon3.getIconWidth(),
+							screen.icon3.getIconHeight());
+					screen.image3.setVisible(true);
+					break;
+				case 2:
+					screen.image3.setBounds(screen.exButton[screen.ansNum[2]].getX(),
+							screen.exButton[screen.ansNum[2]].getY() - 30, screen.icon3.getIconWidth(),
+							screen.icon3.getIconHeight());
+					screen.image3.setVisible(true);
+					break;
+				}
+				screen.pointChecker.MinusHint();
+			} else
+				JOptionPane.showMessageDialog(null, "íŒíŠ¸ ë‹¤ ì¼ì–´ìš”.");
+		}
 	}
 }
 
@@ -893,94 +909,144 @@ class PassButton implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (screen.remainPassCount > 0) {
+		screen.image3.setVisible(false);
+		screen.wrongQueNum[screen.wrongNum++] = screen.questionNum - 1;
+		if (screen.remainPassCount > 0 && screen.questionNum != 10) {
 			screen.remainPassCount--;
-			// Point.MinusPass();
+			screen.pointChecker.MinusPass();
 			screen.nextQuestion();
+		} else if (screen.questionNum == 10 && screen.remainPassCount > 0) {
+			screen.remainPassCount--;
+			screen.pointChecker.MinusPass();
+			screen.setVisible(false);
+			SuccessScreen successScreen = new SuccessScreen(screen.level,
+					screen.jLabel2.getText() + ":" + screen.jLabel1.getText(), screen.remainLifeCount,
+					Integer.parseInt(screen.jLabel4.getText()), screen.Que, screen.wrongQueNum);
+			successScreen.setVisible(true);
 		} else
-			JOptionPane.showMessageDialog(null, "ÆĞ½º ´Ù ½è¾î¿ä.");
+			JOptionPane.showMessageDialog(null, "íŒ¨ìŠ¤ ë‹¤ ì¼ì–´ìš”.");
 	}
 }
 
-class CheckButton implements ActionListener, Runnable {
+class CheckButton implements ActionListener {
 	LevelLowScreen levelLowScreen;
 	PointChecker Point;
 	QueParser Que;
 	String exam[];
 	JLabel image;
 	int num = 0;
-	int QueNum = 0;
 	boolean right;
+	boolean retry = false;
 
-	public CheckButton(LevelLowScreen levelLowScreen, int num, QueParser Que, PointChecker Point, String[] exam,
-			int QueNum) {
+	public CheckButton(LevelLowScreen levelLowScreen, QueParser Que, PointChecker Point, String[] exam, boolean retry) {
 		this.levelLowScreen = levelLowScreen;
-		this.num = num;
 		this.Que = Que;
 		this.Point = Point;
 		this.exam = exam;
-		right = true;
-		this.QueNum = QueNum;
-	}
-
-	public CheckButton(JLabel image) {
-		this.image = image;
+		this.right = true;
+		this.retry = retry;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		//System.out.println("¹ÌÄ£...." + levelLowScreen);
+		levelLowScreen.timerCount = 0;
+		Timer timer = new Timer(levelLowScreen);
+		timer.reset();
 
-		//System.out.println("CheckButton : " + Que.Answer[0] + " " + Que.Answer[1] + " " + Que.Answer[2]);
-		System.out.println(exam[0]);
 		for (int i = 0; i < 3; i++) {
 			if (!(exam[i].equals(Que.Answer[i]))) {
 				right = false;
 			}
 		}
 
-		if (right == true) { // Á¤´äÀ» ¸ÂÃá °æ¿ì
-			// ³¡°¡Áö ¼º°øÇßÀ» °æ¿ì Á¶°Ç È®ÀÎ ÈÄ
-
-			System.out.println(levelLowScreen.questionNum);
-			if (levelLowScreen.questionNum == 10) {
-				levelLowScreen.setVisible(false);
-				SuccessScreen successScreen = new SuccessScreen();
-				successScreen.setVisible(true);
-			}
-			levelLowScreen.nextQuestion();
-			// Runnable run = new CheckButton(levelLowScreen.image1);
-			// Thread thread = new Thread(run);
-			// thread.run();
-
-		} else { // Á¤´äÀ» ¸ÂÃßÁö ¸øÇÑ °æ¿ì
-			Life remainLife = new Life(levelLowScreen.life, --levelLowScreen.remainLifeCount);
-			remainLife.lifeReduce();
-			levelLowScreen.nextQuestion();
-			// Point.MinusLife();
-			if (levelLowScreen.remainLifeCount == 0) {
-				levelLowScreen.setVisible(false);
-				FailScreen failScreen = new FailScreen();
-				failScreen.setVisible(true);
-			}
-			right = true;
-			if (levelLowScreen.questionNum == 10) {
-				levelLowScreen.setVisible(false);
-				SuccessScreen successScreen = new SuccessScreen();
-				successScreen.setVisible(true);
-			}
+		for (int i = 0; i < 3; i++) {
+			exam[i] = null;
 		}
+
+		if (retry == false) {
+			if (right == true) { // ì •ë‹µì„ ë§ì¶˜ ê²½ìš°
+				if (levelLowScreen.questionNum == 10) {
+					levelLowScreen.setVisible(false);
+					SuccessScreen successScreen = new SuccessScreen(levelLowScreen.level,
+							levelLowScreen.jLabel2.getText() + ":" + levelLowScreen.jLabel1.getText(),
+							levelLowScreen.remainLifeCount, Integer.parseInt(levelLowScreen.jLabel4.getText()),
+							levelLowScreen.Que, levelLowScreen.wrongQueNum);
+					successScreen.setVisible(true);
+				}
+				levelLowScreen.nextQuestion();
+
+				Runnable run = new OX(levelLowScreen, true);
+				Thread thread = new Thread(run);
+				thread.start();
+
+			} else { // ì •ë‹µì„ ë§ì¶”ì§€ ëª»í•œ ê²½ìš°
+				levelLowScreen.wrongQueNum[levelLowScreen.wrongNum++] = levelLowScreen.questionNum - 1;
+				Life remainLife = new Life(levelLowScreen.life, --levelLowScreen.remainLifeCount);
+				remainLife.lifeReduce();
+				levelLowScreen.pointChecker.MinusLife();
+				if (levelLowScreen.remainLifeCount == 0) {
+					levelLowScreen.setVisible(false);
+					FailScreen failScreen = new FailScreen(levelLowScreen.Que, levelLowScreen.wrongQueNum);
+					failScreen.setVisible(true);
+				}
+				if (levelLowScreen.questionNum == 10) {
+					levelLowScreen.setVisible(false);
+					SuccessScreen successScreen = new SuccessScreen(levelLowScreen.level,
+							levelLowScreen.jLabel2.getText() + ":" + levelLowScreen.jLabel1.getText(),
+							levelLowScreen.remainLifeCount, Integer.parseInt(levelLowScreen.jLabel4.getText()),
+							levelLowScreen.Que, levelLowScreen.wrongQueNum);
+					successScreen.setVisible(true);
+				}
+				right = true;
+				levelLowScreen.nextQuestion();
+
+				Runnable run = new OX(levelLowScreen, false);
+				Thread thread = new Thread(run);
+				thread.start();
+			}
+		} else {
+			if (right == true) {
+				Runnable run = new OX(levelLowScreen, true);
+				Thread thread = new Thread(run);
+				thread.start();
+			} else {
+				Runnable run = new OX(levelLowScreen, false);
+				Thread thread = new Thread(run);
+				thread.start();
+			}
+			levelLowScreen.nextQuestion();
+		}
+	}
+}
+
+class OX implements Runnable {
+	LevelLowScreen levelLowScreen;
+	boolean right;
+
+	public OX(LevelLowScreen levelLowScreen, boolean right) {
+		this.levelLowScreen = levelLowScreen;
+		this.right = right;
 	}
 
 	public void run() {
-		try {
-			image.setVisible(true);
-			Thread.sleep(2000);
-			image.setVisible(false);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		if (right) {
+			try {
+				levelLowScreen.image1.setVisible(true);
+				Thread.sleep(2000);
+				levelLowScreen.image1.setVisible(false);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				levelLowScreen.image2.setVisible(true);
+				Thread.sleep(2000);
+				levelLowScreen.image2.setVisible(false);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
-
 	}
+
 }
 
 class Life {
@@ -1002,13 +1068,13 @@ class Life {
 }
 
 class LevelMiddleScreen extends LevelLowScreen {
-	JButton[] restTime = new JButton[16];
 
 	public LevelMiddleScreen() {
+		level = "ì¤‘";
 
 		setBounds(125, 30, 870, 570);
 
-		panel.remove(jTextArea1);
+		panel.remove(jScrollPane);
 		textIcon = new ImageIcon("C:\\photoshop\\game22.jpg");
 		textImg = textIcon.getImage();
 		jTextArea1 = new JTextArea() {
@@ -1022,7 +1088,12 @@ class LevelMiddleScreen extends LevelLowScreen {
 		jTextArea1.setBackground(new Color(255, 255, 255, 178));
 		jTextArea1.setBorder(null);
 		jTextArea1.setBounds(75, 59, 323, 454);
-		panel.add(jTextArea1);
+		jTextArea1.setLineWrap(true);
+		jTextArea1.setFocusable(false);
+		jScrollPane = new JScrollPane(jTextArea1);
+		jScrollPane.setBounds(75, 59, 323, 454);
+		jScrollPane.setBorder(null);
+		panel.add(jScrollPane);
 
 		makeComponent3();
 
@@ -1033,14 +1104,14 @@ class LevelMiddleScreen extends LevelLowScreen {
 		image.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
 		panel.add(image);
 
-		Runnable run = new Timer(restTime);
+		Runnable run = new Timer(this);
 		Thread thread = new Thread(run);
 		thread.start();
 	}
 
 	public void makeComponent3() {
 
-		int interval = 110; // Å¸ÀÌ¸Ó ¹öÆ° °£°İ
+		int interval = 110; // íƒ€ì´ë¨¸ ë²„íŠ¼ ê°„ê²©
 		for (int i = 0; i < 16; i++) {
 			restTime[i] = new JButton();
 			restTime[i].setBackground(Color.WHITE);
@@ -1048,9 +1119,9 @@ class LevelMiddleScreen extends LevelLowScreen {
 			restTime[i].setBorderPainted(false);
 
 			if (i < 8)
-				restTime[i].setIcon(new ImageIcon("C:\\photoshop\\³ë¶õ¹Ú½º.png"));
+				restTime[i].setIcon(new ImageIcon("C:\\photoshop\\ë…¸ë€ë°•ìŠ¤.png"));
 			else
-				restTime[i].setIcon(new ImageIcon("C:\\photoshop\\»¡°£¹Ú½º.png"));
+				restTime[i].setIcon(new ImageIcon("C:\\photoshop\\ë¹¨ê°„ë°•ìŠ¤.png"));
 
 			restTime[i].setBounds(20, interval, 49, 28);
 			panel.add(restTime[i]);
@@ -1058,90 +1129,69 @@ class LevelMiddleScreen extends LevelLowScreen {
 		}
 	}
 
-	public void showQuestion() {
-		int tm;
-		int arr[] = new int[12];
-		Random rdd = new Random();
-
-		// ¹®Á¦ 10°³ Ãâ·ÂÇØ¾ßµÊ!!
-
-		for (int i = 0; i < 12; i++) {
-			arr[i] = i;
-		}
-		for (int i = 0; i < 12; i++) {
-			int dex = rdd.nextInt(12);
-			tm = arr[i];
-			arr[i] = arr[dex];
-			arr[dex] = tm;
-		}
-
-		for (int i = 0, j = 0; i < 12; i++) { // º¸±â ¹öÆ° °ª ¼öÁ¤ 1111
-			if (i < 3) {
-				exButton[arr[i]].setText(Que.Answer[j++]);
-				ansNum[i] = arr[i];
-			} else {
-				if (j >= Que.Tokenize.length - 1)
-					j -= 4;
-				if (Que.Tokenize[j].equals("\\n") || Que.Tokenize[j].equals("_0_") || Que.Tokenize[j].equals("_1_")
-						|| Que.Tokenize[j].equals("_2_")) {
-					i--;
-					j++;
-					continue;
-				}
-				if (j >= Que.Tokenize.length - 1)
-					j -= 7;
-				exButton[arr[i]].setText(Que.Tokenize[j++]);
-			}
-		}
-		System.out.println("showQuestion : " + Que.Answer[0] + " " +
-		Que.Answer[1] + " " + Que.Answer[2]);
-		jTextArea1.setText(" ");
-		jTextArea1.append(questionNum + ". : " + Que.QueArr[questionNum - 1][1] + "\n");
-
-		for (int i = 0; i < Que.tokennumber; i++) {
-			if (Que.Tokenize[i].equals("\\n"))
-				jTextArea1.append("\n");
-			else
-				jTextArea1.append(Que.Tokenize[i]);
-		}
-		for (int i = 0; i < 3; i++) {
-			jTextArea1.append("\n\n" + i + "¹øÂ° ´ä : " + Que.Answer[i]);
-		}
-	}
 }
 
 class Timer implements Runnable {
-	JButton[] restTime;
+	LevelLowScreen levelLowScreen;
 
-	public Timer(JButton[] restTime) {
-		this.restTime = restTime;
+	public Timer(LevelLowScreen levelLowScreen) {
+		this.levelLowScreen = levelLowScreen;
+	}
+
+	public void reset() {
+		for (int j = 0; j < 16 && levelLowScreen.restTime[j] != null; j++) {
+			if (j < 8)
+				levelLowScreen.restTime[j].setIcon(new ImageIcon("C:\\photoshop\\ë…¸ë€ë°•ìŠ¤.png"));
+			else
+				levelLowScreen.restTime[j].setIcon(new ImageIcon("C:\\photoshop\\ë¹¨ê°„ë°•ìŠ¤.png"));
+		}
 	}
 
 	public void run() {
 		long startTime = System.currentTimeMillis();
 		long endTime = 0;
-		int i = 0;
 
 		for (;;) {
 			endTime = System.currentTimeMillis();
 			if (endTime - startTime > 3000) {
-				restTime[i++].setIcon(new ImageIcon("C:\\photoshop\\È¸»ö¹Ú½º.png"));
+				levelLowScreen.restTime[levelLowScreen.timerCount++].setIcon(new ImageIcon("C:\\photoshop\\íšŒìƒ‰ë°•ìŠ¤.png"));
 				startTime = System.currentTimeMillis();
 			}
 
-			if (i > 15)
-				break;
+			if (levelLowScreen.timerCount > 15) {
+				levelLowScreen.timerCount = 0;
+				reset();
+				Life remainLife = new Life(levelLowScreen.life, --levelLowScreen.remainLifeCount);
+				remainLife.lifeReduce();
+				levelLowScreen.pointChecker.MinusLife();
+				if (levelLowScreen.remainLifeCount == 0) {
+					levelLowScreen.setVisible(false);
+					FailScreen failScreen = new FailScreen(levelLowScreen.Que, levelLowScreen.wrongQueNum);
+					failScreen.setVisible(true);
+				}
+				if (levelLowScreen.questionNum == 10) {
+					levelLowScreen.setVisible(false);
+					SuccessScreen successScreen = new SuccessScreen(levelLowScreen.level,
+							levelLowScreen.jLabel1.getText() + ":" + levelLowScreen.jLabel2.getText(),
+							levelLowScreen.remainLifeCount, Integer.parseInt(levelLowScreen.jLabel4.getText()),
+							levelLowScreen.Que, levelLowScreen.wrongQueNum);
+					successScreen.setVisible(true);
+					break;
+				}
+				levelLowScreen.nextQuestion();
+			}
 		}
 	}
 }
 
-class LevelHighScreen extends LevelMiddleScreen { // °¡¸®±â ±¸ÇöÇÒ ºÎºĞ
+class LevelHighScreen extends LevelMiddleScreen { // ê°€ë¦¬ê¸° êµ¬í˜„í•  ë¶€ë¶„
 
 	Blind Bin;
 
 	public LevelHighScreen() {
+		level = "ìƒ";
 
-		panel.remove(jTextArea1);
+		panel.remove(jScrollPane);
 		textIcon = new ImageIcon("C:\\photoshop\\game33.jpg");
 		textImg = textIcon.getImage();
 		jTextArea1 = new JTextArea() {
@@ -1155,10 +1205,15 @@ class LevelHighScreen extends LevelMiddleScreen { // °¡¸®±â ±¸ÇöÇÒ ºÎºĞ
 		jTextArea1.setBackground(new Color(255, 255, 255, 178));
 		jTextArea1.setBorder(null);
 		jTextArea1.setBounds(75, 59, 323, 454);
-		panel.add(jTextArea1);
+		jTextArea1.setLineWrap(true);
+		jTextArea1.setFocusable(false);
+		jScrollPane = new JScrollPane(jTextArea1);
+		jScrollPane.setBounds(75, 59, 323, 454);
+		jScrollPane.setBorder(null);
+		panel.add(jScrollPane);
 
 		panel.remove(image);
-		ImageIcon icon = new ImageIcon("C:\\photoshop\\game3.png"); // ³ÖÀ» ±×¸²
+		ImageIcon icon = new ImageIcon("C:\\photoshop\\game3.png"); // ë„£ì„ ê·¸ë¦¼
 
 		JLabel image = new JLabel(icon);
 		image.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
@@ -1178,9 +1233,15 @@ class SuccessScreen extends JFrame {
 	JPanel panel;
 
 	JLabel jLabel1;
-	
 
-	public SuccessScreen() {
+	String level, time;
+	int life, score;
+
+	public SuccessScreen(String level, String time, int life, int score, QueParser Que, int[] wrongQueNum) {
+		this.level = level;
+		this.time = time;
+		this.life = life;
+		this.score = score;
 
 		setTitle("Magician Of Code");
 		setBounds(230, 150, 300, 280);
@@ -1193,7 +1254,7 @@ class SuccessScreen extends JFrame {
 		makeComponent();
 		getContentPane().add(panel, BorderLayout.CENTER);
 
-		Runnable run = new LastFlash(this);
+		Runnable run = new LastFlash(this, level, time, life, score, Que, wrongQueNum);
 		Thread thread = new Thread(run);
 		thread.start();
 	}
@@ -1214,7 +1275,7 @@ class FailScreen extends JFrame {
 
 	JLabel jLabel1;
 
-	public FailScreen() {
+	public FailScreen(QueParser Que, int[] wrongQueNum) {
 		UIManager.put("swing.boldMetal", Boolean.FALSE);
 		setResizable(false);
 
@@ -1228,7 +1289,7 @@ class FailScreen extends JFrame {
 		makeComponent();
 		getContentPane().add(panel, BorderLayout.CENTER);
 
-		Runnable run = new LastFlash(this);
+		Runnable run = new LastFlash(this, Que, wrongQueNum);
 		Thread thread = new Thread(run);
 		thread.start();
 	}
@@ -1247,13 +1308,26 @@ class FailScreen extends JFrame {
 class LastFlash implements Runnable {
 	SuccessScreen successScreen;
 	FailScreen failScreen;
+	String level, time;
+	int life, score;
+	QueParser Que;
+	int[] wrongQueNum;
 
-	public LastFlash(SuccessScreen successScreen) {
+	public LastFlash(SuccessScreen successScreen, String level, String time, int life, int score, QueParser Que,
+			int[] wrongQueNum) {
 		this.successScreen = successScreen;
+		this.level = level;
+		this.time = time;
+		this.life = life;
+		this.score = score;
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
 	}
 
-	public LastFlash(FailScreen failScreen) {
+	public LastFlash(FailScreen failScreen, QueParser Que, int[] wrongQueNum) {
 		this.failScreen = failScreen;
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
 	}
 
 	public void run() {
@@ -1261,11 +1335,11 @@ class LastFlash implements Runnable {
 			Thread.sleep(2000);
 			if (successScreen == null) {
 				failScreen.setVisible(false);
-				FinalScreen finalScreen = new FinalScreen();
+				FinalScreen finalScreen = new FinalScreen(Que, wrongQueNum);
 				finalScreen.setVisible(true);
 			} else {
 				successScreen.setVisible(false);
-				RankingPopup rankingPopup = new RankingPopup();
+				RankingPopup rankingPopup = new RankingPopup(level, time, life, score, Que, wrongQueNum);
 				rankingPopup.setVisible(true);
 			}
 
@@ -1281,7 +1355,18 @@ class RankingPopup extends JFrame {
 	JTextField jTextField1;
 	JButton jButton1;
 
-	public RankingPopup() {
+	String level, time;
+	int life, score;
+	QueParser Que;
+	int[] wrongQueNum;
+
+	public RankingPopup(String level, String time, int life, int score, QueParser Que, int[] wrongQueNum) {
+		this.level = level;
+		this.time = time;
+		this.life = life;
+		this.score = score;
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
 
 		setTitle("Magician Of Code");
 		setBounds(235, 174, 430, 315);
@@ -1315,13 +1400,12 @@ class RankingPopup extends JFrame {
 		panel.add(jTextField1);
 
 		jButton1 = new JButton();
-		;
 		jButton1.setIcon(new ImageIcon("C:\\photoshop\\ok.png"));
 		jButton1.setBackground(Color.WHITE);
 		jButton1.setOpaque(false);
 		jButton1.setBorderPainted(false);
 		jButton1.setBounds(180, 215, 80, 33);
-		ActionListener listener1 = new RankingRegisterButton(this);
+		ActionListener listener1 = new RankingRegisterButton(this, level, time, life, score, Que, wrongQueNum);
 		jButton1.addActionListener(listener1);
 		panel.add(jButton1);
 	}
@@ -1329,18 +1413,34 @@ class RankingPopup extends JFrame {
 
 class RankingRegisterButton implements ActionListener {
 	RankingPopup rankingPopup;
+	String level, name, time;
+	int life, score;
+	QueParser Que;
+	int[] wrongQueNum;
+	ranking ranking = new ranking();
 
-	public RankingRegisterButton(RankingPopup rankingPopup) {
+	public RankingRegisterButton(RankingPopup rankingPopup, String level, String time, int life, int score,
+			QueParser Que, int[] wrongQueNum) {
 		this.rankingPopup = rankingPopup;
+		this.level = level;
+		this.time = time;
+		this.life = life;
+		this.score = score;
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		// µğºñ¿¡ ·©Å· µî·Ï --> ¹®Á¦¸¦ ¸ÂÃç¼­ db¿¡ µî·Ï½ÃÅ³ ¶§ ÇÊ¿ä! ¾Ë°í¸®Áò ÇÊ¿ä..!
-		ranking ra = new ranking();
-		ra.addRanking();
-		String name = rankingPopup.jTextField1.getText();
+		// ë””ë¹„ì— ë­í‚¹ ë“±ë¡ --> ë¬¸ì œë¥¼ ë§ì¶°ì„œ dbì— ë“±ë¡ì‹œí‚¬ ë•Œ í•„ìš”! ì•Œê³ ë¦¬ì¦˜ í•„ìš”..!
+		name = rankingPopup.jTextField1.getText();
+		if (name.length() > 45) {
+			JOptionPane.showMessageDialog(null, "ì´ë¦„ì´ ë„ˆë¬´ ê¸¸ì–´ìš”!\në‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”\n(45ì ì´í•˜)");
+			return;
+		}
+		ranking.addRanking(level, name, time, life, score);
+
 		rankingPopup.setVisible(false);
-		RankingScreen rankingScreen = new RankingScreen(0);
+		RankingScreen rankingScreen = new RankingScreen(0, level, Que, wrongQueNum);
 		rankingScreen.setVisible(true);
 
 	}
@@ -1354,9 +1454,27 @@ class RankingScreen extends JFrame {
 	JButton jButton1, jButton2, jButton3, jButton4;
 
 	int num = 0;
+	int levelNum = 0;
+	String level = "";
 
-	public RankingScreen(int num) {
+	QueParser Que;
+	int[] wrongQueNum;
+
+	public RankingScreen(int num, String level, QueParser Que, int[] wrongQueNum) {
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
 		this.num = num;
+		switch (level) {
+		case "ìƒ":
+			levelNum = 1;
+			break;
+		case "ì¤‘":
+			levelNum = 2;
+			break;
+		case "í•˜":
+			levelNum = 3;
+			break;
+		}
 
 		setTitle("Magician Of Code");
 		setBounds(141, 33, 527, 585);
@@ -1386,22 +1504,21 @@ class RankingScreen extends JFrame {
 		jTextArea1.setFont(new Font("Dialog.plain", 0, 12));
 		jTextArea1.setBounds(39, 114, 442, 369);
 		panel.add(jTextArea1);
-		RankingPrint rankingPrint = new RankingPrint(this, 1); // default·Î ³­ÀÌµµ »ó
-																// ·©Å· Ãâ·Â
-		rankingPrint.actionPerformed(null); // 1 = »ó, 2 = Áß, 3 = ÇÏ
+		RankingPrint rankingPrint = new RankingPrint(this, levelNum);
+		rankingPrint.actionPerformed(null);
 
 		jButton1 = new JButton();
-		jButton1.setIcon(new ImageIcon("C:\\photoshop\\·©Å·³ª°¡±â.png"));
+		jButton1.setIcon(new ImageIcon("C:\\photoshop\\ë­í‚¹ë‚˜ê°€ê¸°.png"));
 		jButton1.setBackground(Color.WHITE);
 		jButton1.setOpaque(false);
 		jButton1.setBorderPainted(false);
 		jButton1.setBounds(395, 485, 102, 37);
-		ActionListener listener1 = new FinalScreenButton(this, num);
+		ActionListener listener1 = new FinalScreenButton(this, num, Que, wrongQueNum);
 		jButton1.addActionListener(listener1);
 		panel.add(jButton1);
 
 		jButton2 = new JButton();
-		jButton2.setIcon(new ImageIcon("C:\\photoshop\\·©Å·»ó.png"));
+		jButton2.setIcon(new ImageIcon("C:\\photoshop\\ë­í‚¹ìƒ.png"));
 		jButton2.setBackground(Color.WHITE);
 		jButton2.setOpaque(false);
 		jButton2.setBorderPainted(false);
@@ -1411,7 +1528,7 @@ class RankingScreen extends JFrame {
 		panel.add(jButton2);
 
 		jButton3 = new JButton();
-		jButton3.setIcon(new ImageIcon("C:\\photoshop\\·©Å·Áß.png"));
+		jButton3.setIcon(new ImageIcon("C:\\photoshop\\ë­í‚¹ì¤‘.png"));
 		jButton3.setBackground(Color.WHITE);
 		jButton3.setOpaque(false);
 		jButton3.setBorderPainted(false);
@@ -1421,7 +1538,7 @@ class RankingScreen extends JFrame {
 		panel.add(jButton3);
 
 		jButton4 = new JButton();
-		jButton4.setIcon(new ImageIcon("C:\\photoshop\\·©Å·ÇÏ.png"));
+		jButton4.setIcon(new ImageIcon("C:\\photoshop\\ë­í‚¹í•˜.png"));
 		jButton4.setBackground(Color.WHITE);
 		jButton4.setOpaque(false);
 		jButton4.setBorderPainted(false);
@@ -1446,33 +1563,33 @@ class RankingPrint implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		switch (num) {
-		case 1: // ³­ÀÌµµ »ó ·©Å· Ãâ·Â
+		case 1: // ë‚œì´ë„ ìƒ ë­í‚¹ ì¶œë ¥
 			Database_ranking.showRankingHigh();
 
-			rankingScreen.jTextArea1.setText("\tÀÌ  ¸§\tÁ¡  ¼ö\t½Ã  °£\t»ı  ¸í\n");
+			rankingScreen.jTextArea1.setText("\tì´  ë¦„\tì   ìˆ˜\tì‹œ  ê°„\tìƒ  ëª…\n");
 			for (i = 0; i < 10; i++) {
-				rankingScreen.jTextArea1.append((i + 1) + "µî" + "\t" + Database_ranking.highrank[i][1] + "\t"
+				rankingScreen.jTextArea1.append((i + 1) + "ë“±" + "\t" + Database_ranking.highrank[i][1] + "\t"
 						+ Database_ranking.highrank[i][2] + "\t" + Database_ranking.highrank[i][3] + "\t"
 						+ Database_ranking.highrank[i][4] + "\n");
 			}
 			break;
-		case 2: // ³­ÀÌµµ Áß ·©Å· Ãâ·Â
+		case 2: // ë‚œì´ë„ ì¤‘ ë­í‚¹ ì¶œë ¥
 			Database_ranking.showRankingMid();
 
-			rankingScreen.jTextArea1.setText("\tÀÌ  ¸§\tÁ¡  ¼ö\t½Ã  °£\t»ı  ¸í\n");
+			rankingScreen.jTextArea1.setText("\tì´  ë¦„\tì   ìˆ˜\tì‹œ  ê°„\tìƒ  ëª…\n");
 			for (i = 0; i < 10; i++) {
 				rankingScreen.jTextArea1.append(
-						(i + 1) + "µî" + "\t" + Database_ranking.midrank[i][1] + "\t" + Database_ranking.midrank[i][2]
+						(i + 1) + "ë“±" + "\t" + Database_ranking.midrank[i][1] + "\t" + Database_ranking.midrank[i][2]
 								+ "\t" + Database_ranking.midrank[i][3] + "\t" + Database_ranking.midrank[i][4] + "\n");
 			}
 			break;
-		case 3: // ³­ÀÌµµ ÇÏ ·©Å· Ãâ·Â
+		case 3: // ë‚œì´ë„ í•˜ ë­í‚¹ ì¶œë ¥
 			Database_ranking.showRankingLow();
 
-			rankingScreen.jTextArea1.setText("\tÀÌ  ¸§\tÁ¡  ¼ö\t½Ã  °£\t»ı  ¸í\n");
+			rankingScreen.jTextArea1.setText("\tì´  ë¦„\tì   ìˆ˜\tì‹œ  ê°„\tìƒ  ëª…\n");
 			for (i = 0; i < 10; i++) {
 				rankingScreen.jTextArea1.append(
-						(i + 1) + "µî" + "\t" + Database_ranking.lowrank[i][1] + "\t" + Database_ranking.lowrank[i][2]
+						(i + 1) + "ë“±" + "\t" + Database_ranking.lowrank[i][1] + "\t" + Database_ranking.lowrank[i][2]
 								+ "\t" + Database_ranking.lowrank[i][3] + "\t" + Database_ranking.lowrank[i][4] + "\n");
 			}
 			break;
@@ -1486,7 +1603,7 @@ class connectDatabase {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			System.out.println("µå¶óÀÌ¹ö °Ë»ö ½ÇÆĞ");
+			System.out.println("ë“œë¼ì´ë²„ ê²€ìƒ‰ ì‹¤íŒ¨");
 		}
 
 		try {
@@ -1494,40 +1611,24 @@ class connectDatabase {
 			con = DriverManager.getConnection("jdbc:mysql://165.229.90.36:3306/scheme??autoReconnect=true&useSSL=false",
 					"root", "thrhd");
 
-			System.out.println("My-SQL Á¢¼Ó¼º°ø");
+			System.out.println("My-SQL ì ‘ì†ì„±ê³µ");
 			con.close();
 		} catch (SQLException e) {
-			System.out.println("My-SQL Á¢¼Ó½ÇÆĞ");
+			System.out.println("My-SQL ì ‘ì†ì‹¤íŒ¨");
 		}
 	}
 }
 
 class ranking {
-
 	String[][] highrank = new String[10][5];
 	String[][] midrank = new String[10][5];
 	String[][] lowrank = new String[10][5];
-	int score, life;
-	String level, name, time;
-	
-	void addRanking() {
+
+	void addRanking(String level, String name, String time, int life, int score) {
 
 		String sql = "insert into ranking values(?,?,?,?,?)";
 
 		try {
-
-			Scanner sc = new Scanner(System.in);
-
-			System.out.println("³­ÀÌµµ¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
-			level = sc.nextLine();
-			System.out.println("ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä.");
-			name = sc.nextLine();
-			System.out.println("½Ã°£À» ÀÔ·ÂÇÏ¼¼¿ä.");
-			time = sc.nextLine();
-			System.out.println("Á¡¼öÀ» ÀÔ·ÂÇÏ¼¼¿ä.");
-			score = sc.nextInt();
-			System.out.println("»ı¸íÀ» ÀÔ·ÂÇÏ¼¼¿ä.");
-			life = sc.nextInt();
 
 			Connection con = null;
 			con = DriverManager.getConnection("jdbc:mysql://165.229.90.36:3306/scheme??autoReconnect=true&useSSL=false",
@@ -1545,12 +1646,12 @@ class ranking {
 			int n = ps.executeUpdate();
 
 			if (n > 0) {
-				System.out.println("Ãß°¡ ¼º°ø");
+				System.out.println("ì¶”ê°€ ì„±ê³µ");
 			} else {
-				System.out.println("Ãß°¡ ½ÇÆĞ");
+				System.out.println("ì¶”ê°€ ì‹¤íŒ¨");
 			}
 		} catch (SQLException e) {
-			System.out.println("µ¥ÀÌÅÍ Ãß°¡ ¿¡·¯");
+			System.out.println("ë°ì´í„° ì¶”ê°€ ì—ëŸ¬");
 		}
 	}
 
@@ -1567,7 +1668,7 @@ class ranking {
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 
-			String sql = "select * from ranking where LEVEL = '»ó' order by SCORE desc, TIME, LIFE desc";
+			String sql = "select * from ranking where LEVEL = 'ìƒ' order by SCORE desc, TIME, LIFE desc";
 
 			ps = con.prepareStatement(sql);
 			rs = ps.executeQuery();
@@ -1586,7 +1687,7 @@ class ranking {
 				}
 			}
 		} catch (SQLException e) {
-			System.out.println("Ãâ·Â¿À·ù");
+			System.out.println("ì¶œë ¥ì˜¤ë¥˜");
 		}
 		return highrank;
 	}
@@ -1602,7 +1703,7 @@ class ranking {
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 
-			String sql = "select * from ranking where LEVEL = 'Áß' order by SCORE desc, TIME, LIFE desc";
+			String sql = "select * from ranking where LEVEL = 'ì¤‘' order by SCORE desc, TIME, LIFE desc";
 
 			ps = con.prepareStatement(sql);
 			rs = ps.executeQuery();
@@ -1621,7 +1722,7 @@ class ranking {
 				}
 			}
 		} catch (SQLException e) {
-			System.out.println("Ãâ·Â¿À·ù");
+			System.out.println("ì¶œë ¥ì˜¤ë¥˜");
 		}
 		return midrank;
 	}
@@ -1637,7 +1738,7 @@ class ranking {
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 
-			String sql = "select * from ranking where LEVEL = 'ÇÏ' order by SCORE desc, TIME, LIFE desc";
+			String sql = "select * from ranking where LEVEL = 'í•˜' order by SCORE desc, TIME, LIFE desc";
 
 			ps = con.prepareStatement(sql);
 			rs = ps.executeQuery();
@@ -1656,7 +1757,7 @@ class ranking {
 				}
 			}
 		} catch (SQLException e) {
-			System.out.println("Ãâ·Â¿À·ù");
+			System.out.println("ì¶œë ¥ì˜¤ë¥˜");
 		}
 		return lowrank;
 	}
@@ -1665,15 +1766,15 @@ class ranking {
 class question {
 
 	String dex, problem, answer, explain;
-	String[][] arr = new String[10][4];// ÀÎµ¦½º,¹®Á¦,´ä,ÇØ¼³
+	String[][] arr = new String[10][4];// ì¸ë±ìŠ¤,ë¬¸ì œ,ë‹µ,í•´ì„¤
 	int i;
-	int[] randnum = new int[30];
+	int[] randnum = new int[29];
 	String[] qustnum = new String[10];
 	int j;
 	int tmp2;
 	int level;
 
-	// showQuestÇÔ¼ö¿¡¼­ printlnºÎºĞÀº ¹è¿­¿¡ Á¤»óÀûÀ¸·Î µé¾î°¬´ÂÁö È®ÀÎÇÏ´Â ºÎºĞÀÌ¶ó¼­ ÄÚµå ÇÕÄ¥¶§ Áö¿ì½Ã¸é µË´Ï´ç~
+	// showQuestí•¨ìˆ˜ì—ì„œ printlnë¶€ë¶„ì€ ë°°ì—´ì— ì •ìƒì ìœ¼ë¡œ ë“¤ì–´ê°”ëŠ”ì§€ í™•ì¸í•˜ëŠ” ë¶€ë¶„ì´ë¼ì„œ ì½”ë“œ í•©ì¹ ë•Œ ì§€ìš°ì‹œë©´ ë©ë‹ˆë‹¹~
 	question(int level) {
 		this.level = level;
 	}
@@ -1688,19 +1789,20 @@ class question {
 
 			PreparedStatement ps = null;
 			ResultSet rs = null;
-			// ºñÁßº¹ ·£´ıÇÔ¼ö
+			// ë¹„ì¤‘ë³µ ëœë¤í•¨ìˆ˜
 			Random ra = new Random();
-			for (j = 0; j < 30; j++) {
-				randnum[j] = j;
+			for (j = 0; j < 29; j++) {
+				randnum[j] = j + 1;
 			}
-			for (j = 0; j < 30; j++) {
-				int desti = ra.nextInt(30);
+
+			for (j = 0; j < 29; j++) {
+				int desti = ra.nextInt(28) + 1;
 				tmp2 = randnum[j];
 				randnum[j] = randnum[desti];
 				randnum[desti] = tmp2;
 			}
 			for (j = 0; j < 10; j++) {
-				qustnum[j] = Integer.toString(randnum[j]);// 10°³
+				qustnum[j] = Integer.toString(randnum[j]);// 10ê°œ
 			}
 
 			for (i = 0; i < 10; i++) {
@@ -1740,19 +1842,20 @@ class question {
 
 			PreparedStatement ps = null;
 			ResultSet rs = null;
-			// ºñÁßº¹ ·£´ıÇÔ¼ö
+			// ë¹„ì¤‘ë³µ ëœë¤í•¨ìˆ˜
 			Random ra = new Random();
-			for (j = 0; j < 30; j++) {
-				randnum[j] = j;
+			for (j = 0; j < 29; j++) {
+				randnum[j] = j + 1;
 			}
-			for (j = 0; j < 30; j++) {
-				int desti = ra.nextInt(30);
+
+			for (j = 0; j < 29; j++) {
+				int desti = ra.nextInt(28) + 1;
 				tmp2 = randnum[j];
 				randnum[j] = randnum[desti];
 				randnum[desti] = tmp2;
 			}
 			for (j = 0; j < 10; j++) {
-				qustnum[j] = Integer.toString(randnum[j]);// 10°³
+				qustnum[j] = Integer.toString(randnum[j]);// 10ê°œ
 			}
 
 			for (i = 0; i < 10; i++) {
@@ -1773,8 +1876,8 @@ class question {
 					arr[i][2] = answer;
 					arr[i][3] = explain;
 
-					System.out.println((i + 1) + ". " + arr[i][1]);
-					System.out.println(arr[i][2] + "\n" + arr[i][3]);
+					// System.out.println((i + 1) + ". " + arr[i][1]);
+					// System.out.println(arr[i][2] + "\n" + arr[i][3] + "\n!");
 				}
 			}
 		} catch (SQLException e) {
@@ -1793,19 +1896,20 @@ class question {
 
 			PreparedStatement ps = null;
 			ResultSet rs = null;
-			// ºñÁßº¹ ·£´ıÇÔ¼ö
+			// ë¹„ì¤‘ë³µ ëœë¤í•¨ìˆ˜
 			Random ra = new Random();
-			for (j = 0; j < 30; j++) {
-				randnum[j] = j;
+			for (j = 0; j < 29; j++) {
+				randnum[j] = j + 1;
 			}
-			for (j = 0; j < 30; j++) {
-				int desti = ra.nextInt(30);
+
+			for (j = 0; j < 29; j++) {
+				int desti = ra.nextInt(28) + 1;
 				tmp2 = randnum[j];
 				randnum[j] = randnum[desti];
 				randnum[desti] = tmp2;
 			}
 			for (j = 0; j < 10; j++) {
-				qustnum[j] = Integer.toString(randnum[j]);// 10°³
+				qustnum[j] = Integer.toString(randnum[j]);// 10ê°œ
 			}
 
 			for (i = 0; i < 10; i++) {
@@ -1842,19 +1946,27 @@ class FinalScreenButton implements ActionListener {
 	RetryScreen retryScreen;
 	SolutionScreen solutionScreen;
 	int num = 0;
+	QueParser Que;
+	int[] wrongQueNum;
 
-	public FinalScreenButton(RankingScreen rankingScreen, int num) {
+	public FinalScreenButton(RankingScreen rankingScreen, int num, QueParser Que, int[] wrongQueNum) {
 		this.rankingScreen = rankingScreen;
 		this.num = num;
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
 	}
 
-	public FinalScreenButton(RetryScreen retryScreen, int num) {
+	public FinalScreenButton(RetryScreen retryScreen, int num, QueParser Que, int[] wrongQueNum) {
 		this.retryScreen = retryScreen;
 		this.num = num;
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
 	}
 
-	public FinalScreenButton(SolutionScreen solutionScreen) {
+	public FinalScreenButton(SolutionScreen solutionScreen, QueParser Que, int[] wrongQueNum) {
 		this.solutionScreen = solutionScreen;
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -1864,14 +1976,14 @@ class FinalScreenButton implements ActionListener {
 			startScreen2.setVisible(true);
 		} else if (num == 1) {
 			retryScreen.setVisible(false);
-			FinalScreen finalScreen = new FinalScreen();
+			FinalScreen finalScreen = new FinalScreen(Que, wrongQueNum);
 			finalScreen.setVisible(true);
 		} else {
 			if (solutionScreen == null)
 				rankingScreen.setVisible(false);
 			else
 				solutionScreen.setVisible(false);
-			FinalScreen finalScreen = new FinalScreen();
+			FinalScreen finalScreen = new FinalScreen(Que, wrongQueNum);
 			finalScreen.setVisible(true);
 		}
 	}
@@ -1882,7 +1994,12 @@ class FinalScreen extends JFrame {
 
 	JButton jButton1, jButton2, jButton3, jButton4, jButton5;
 
-	public FinalScreen() {
+	QueParser Que;
+	int[] wrongQueNum;
+
+	public FinalScreen(QueParser Que, int[] wrongQueNum) {
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
 
 		setTitle("Magician Of Code");
 		setBounds(125, 30, 870, 570);
@@ -1912,7 +2029,7 @@ class FinalScreen extends JFrame {
 		jButton1.setOpaque(false);
 		jButton1.setBorderPainted(false);
 		jButton1.setBounds(360, 30, 140, 52);
-		ActionListener listener1 = new RetryButton(this);
+		ActionListener listener1 = new RetryButton(this, Que, wrongQueNum);
 		jButton1.addActionListener(listener1);
 		panel.add(jButton1);
 
@@ -1922,7 +2039,7 @@ class FinalScreen extends JFrame {
 		jButton2.setOpaque(false);
 		jButton2.setBorderPainted(false);
 		jButton2.setBounds(360, 90, 140, 52);
-		ActionListener listener2 = new SolutionButton(this);
+		ActionListener listener2 = new SolutionButton(this, Que, wrongQueNum);
 		jButton2.addActionListener(listener2);
 		panel.add(jButton2);
 
@@ -1932,7 +2049,7 @@ class FinalScreen extends JFrame {
 		jButton3.setOpaque(false);
 		jButton3.setBorderPainted(false);
 		jButton3.setBounds(360, 150, 140, 52);
-		ActionListener listener3 = new RankingButton(this);
+		ActionListener listener3 = new RankingButton(this, Que, wrongQueNum);
 		jButton3.addActionListener(listener3);
 		panel.add(jButton3);
 
@@ -1960,28 +2077,36 @@ class FinalScreen extends JFrame {
 
 class RetryButton implements ActionListener {
 	FinalScreen finalScreen;
+	QueParser Que;
+	int[] wrongQueNum;
 
-	public RetryButton(FinalScreen finalScreen) {
+	public RetryButton(FinalScreen finalScreen, QueParser Que, int[] wrongQueNum) {
 		this.finalScreen = finalScreen;
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		finalScreen.setVisible(false);
-		RetryScreen retryScreen = new RetryScreen();
+		RetryScreen retryScreen = new RetryScreen(Que, wrongQueNum);
 		retryScreen.setVisible(true);
 	}
 }
 
 class SolutionButton implements ActionListener {
 	FinalScreen finalScreen;
+	QueParser Que;
+	int[] wrongQueNum;
 
-	public SolutionButton(FinalScreen finalScreen) {
+	public SolutionButton(FinalScreen finalScreen, QueParser Que, int[] wrongQueNum) {
 		this.finalScreen = finalScreen;
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		finalScreen.setVisible(false);
-		SolutionScreen solutionScreen = new SolutionScreen();
+		SolutionScreen solutionScreen = new SolutionScreen(Que, wrongQueNum);
 		solutionScreen.setVisible(true);
 	}
 }
@@ -1990,14 +2115,18 @@ class RankingButton implements ActionListener {
 	StartScreen2 startScreen2;
 	FinalScreen finalScreen;
 	int num = 0;
+	QueParser Que;
+	int[] wrongQueNum;
 
 	public RankingButton(StartScreen2 startScreen2, int num) {
 		this.startScreen2 = startScreen2;
 		this.num = num;
 	}
 
-	public RankingButton(FinalScreen finalScreen) {
+	public RankingButton(FinalScreen finalScreen, QueParser Que, int[] wrongQueNum) {
 		this.finalScreen = finalScreen;
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -2005,17 +2134,102 @@ class RankingButton implements ActionListener {
 			finalScreen.setVisible(false);
 		else
 			startScreen2.setVisible(false);
-		RankingScreen rankingScreen = new RankingScreen(num);
+		RankingScreen rankingScreen = new RankingScreen(num, "í•˜", Que, wrongQueNum);
 		rankingScreen.setVisible(true);
 	}
 }
 
 class RetryScreen extends LevelLowScreen {
-	JButton jButton1;
+	JButton jButton8;
+	int quesNum = 0;
+	QueParser Que;
+	int[] wrongQueNum;
 
-	public RetryScreen() {
+	public void nextQuestion() {
+		Que.QueProvider(wrongQueNum[quesNum++]);
+		showQuestion();
+	}
+
+	public void showQuestion() {
+
+		int arr[] = new int[12];
+		Random rdd = new Random();
+
+		for (int i = 0; i < 12; i++)
+			arr[i] = i;
+
+		for (int i = 0; i < 12; i++) {
+			int des = rdd.nextInt(12);
+			int temp = arr[i];
+			arr[i] = arr[des];
+			arr[des] = temp;
+		}
+
+		for (int i = 0; i < 3; i++) {
+			exButton[arr[i]].setText((Que.Answer[i]));
+			ansNum[i] = arr[i];
+		}
+		for (int i = 3; i < 12; i++) {
+			if (i >= Que.count || Que.ex.size() == 0) {
+				exButton[arr[i]].setText("ë³´ë„ˆìŠ¤");
+				continue;
+			}
+
+			int num = rdd.nextInt(Que.ex.size());
+			if (Que.ex.get(num).equals(" ") || Que.ex.get(num).equals("") || Que.ex.get(num).equals("\n")
+					|| Que.ex.get(num).equals("}") || Que.ex.get(num).equals("{") || Que.ex.get(num).equals("\n{")
+					|| Que.ex.get(num).equals("\n}") || Que.ex.get(num).equals("\n\n")) {
+				Que.ex.remove(num);
+				i--;
+				continue;
+			}
+
+			for (int j = 0; j < 12; j++) {
+				if (Que.ex.get(num).equals(exButton[j].getText())) {
+					Que.ex.remove(num);
+					i--;
+					break;
+				}
+			}
+
+			exButton[arr[i]].setText((Que.ex.get(num)));
+			Que.ex.remove(num);
+		}
+		Que.count = 0;
+
+		jTextArea1.setText(" ");
+		jTextArea1.append(quesNum + ". " + Que.QueArr[wrongQueNum[quesNum - 1]][1] + "\n");
+
+		for (int k = 0; k < Que.list.size(); k++)
+			jTextArea1.append(Que.list.get(k));
+	}
+
+	public RetryScreen(QueParser Que, int[] wrongQueNum) {
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
 
 		makeComponent5();
+
+		panel.remove(jScrollPane);
+		textIcon = new ImageIcon("C:\\photoshop\\retry1.jpg");
+		textImg = textIcon.getImage();
+		jTextArea1 = new JTextArea() {
+			public void paintComponent(Graphics g) {
+				g.drawImage(textImg, 0, 0, getWidth(), getHeight(), this);
+				super.paintComponent(g);
+			}
+		};
+		jTextArea1.setText(" ");
+		jTextArea1.setFont(new Font("Dialog.plain", 0, 12));
+		jTextArea1.setBackground(new Color(255, 255, 255, 178));
+		jTextArea1.setBorder(null);
+		jTextArea1.setBounds(75, 59, 323, 454);
+		jTextArea1.setLineWrap(true);
+		jTextArea1.setFocusable(false);
+		jScrollPane = new JScrollPane(jTextArea1);
+		jScrollPane.setBounds(75, 59, 323, 454);
+		jScrollPane.setBorder(null);
+		panel.add(jScrollPane);
 
 		panel.remove(image);
 		ImageIcon icon = new ImageIcon("C:\\photoshop\\retry.png");
@@ -2023,49 +2237,66 @@ class RetryScreen extends LevelLowScreen {
 		image = new JLabel(icon);
 		image.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
 		panel.add(image);
+
+		Que.setRetry();
+		Que.QueProvider(wrongQueNum[quesNum++]);
+		showQuestion();
 	}
 
 	public void makeComponent5() {
+		jButton2.removeActionListener(listener2);
+		ActionListener listener2 = new CheckButton(this, Que, Point, exam, true);
+		jButton2.addActionListener(listener2);
+		jButton2.addActionListener(listener1);
+
+		jButton3.setVisible(false);
+		jButton4.setVisible(false);
 
 		jLabel1.setVisible(false);
 		jLabel2.setVisible(false);
 		jLabel3.setVisible(false);
+		jLabel4.setVisible(false);
+
 		life[0].setVisible(false);
 		life[1].setVisible(false);
 		life[2].setVisible(false);
 
-		jButton1 = new JButton();
-		jButton1.setFont(new Font("Dialog.plain", 0, 12));
-		jButton1.setIcon(new ImageIcon("C:\\photoshop\\return.png"));
-		jButton1.setBackground(Color.WHITE);
-		jButton1.setOpaque(false);
-		jButton1.setBorderPainted(false);
-		jButton1.setBounds(10, 7, 60, 60);
-		ActionListener listener1 = new FinalScreenButton(this, 1);
-		jButton1.addActionListener(listener1);
-		panel.add(jButton1);
-
-		jButton3.removeActionListener(listener3);
-		jButton3.setText("ÀÌÀü¹®Á¦");
-		// ActionListener listener3 = new (); // ÀÌÀü¹®Á¦·Î °¡±â ±¸Çö
-		// jButton3.addActionListener(listener3);
-
-		jButton4.removeActionListener(listener1);
-		jButton4.removeActionListener(listener4);
-		jButton4.setText("´ÙÀ½¹®Á¦");
-		// ActionListener listener4 = new (); // ´ÙÀ½¹®Á¦·Î °¡±â ±¸Çö
-		// jButton4.addActionListener(listener4);
+		jButton8 = new JButton();
+		jButton8.setFont(new Font("Dialog.plain", 0, 12));
+		jButton8.setIcon(new ImageIcon("C:\\photoshop\\return.png"));
+		jButton8.setBackground(Color.WHITE);
+		jButton8.setOpaque(false);
+		jButton8.setBorderPainted(false);
+		jButton8.setBounds(10, 7, 60, 60);
+		ActionListener listener1 = new FinalScreenButton(this, 1, Que, wrongQueNum);
+		jButton8.addActionListener(listener1);
+		panel.add(jButton8);
 	}
 }
 
 class SolutionScreen extends JFrame {
 	JPanel panel;
 
-	JTextField jTextField1, jTextField2;
+	JTextArea jTextArea1, jTextArea2;
 
 	JButton jButton1, jButton2, jButton3;
 
-	public SolutionScreen() {
+	QueParser Que;
+	int[] wrongQueNum;
+	int quesNum = 0;
+	int wrongNum;
+
+	public SolutionScreen(QueParser Que, int[] wrongQueNum) {
+		this.Que = Que;
+		this.wrongQueNum = wrongQueNum;
+
+		for (int i = 1; i < 6; i++) {
+			if (wrongQueNum[i] == 0) {
+				wrongNum = i;
+				break;
+			}
+		}
+		System.out.println(wrongNum);
 
 		setTitle("Magician Of Code");
 		setBounds(125, 30, 870, 570);
@@ -2090,19 +2321,44 @@ class SolutionScreen extends JFrame {
 
 	public void makeComponent() {
 
-		jTextField1 = new JTextField();
-		jTextField1.setText(" ");
-		jTextField1.setFont(new Font("Dialog.plain", 0, 12));
-		jTextField1.setBackground(new Color(255, 255, 255, 178));
-		jTextField1.setBounds(50, 60, 340, 390);
-		panel.add(jTextField1);
+		ImageIcon textIcon = new ImageIcon("C:\\photoshop\\solution1.jpg");
+		Image textImg = textIcon.getImage();
+		jTextArea1 = new JTextArea() {
+			public void paintComponent(Graphics g) {
+				g.drawImage(textImg, 0, 0, getWidth(), getHeight(), this);
+				super.paintComponent(g);
+			}
+		};
+		jTextArea1.setText((quesNum + 1) + "ë²ˆ : " + Que.QueArr[wrongQueNum[quesNum]][1] + "\n\n"
+				+ Que.QueArr[wrongQueNum[quesNum]][2]);
+		jTextArea1.setFont(new Font("Dialog.plain", 0, 12));
+		jTextArea1.setBackground(new Color(255, 255, 255, 178));
+		jTextArea1.setBounds(50, 60, 340, 390);
+		jTextArea1.setLineWrap(true);
+		jTextArea1.setFocusable(false);
+		JScrollPane jScrollPane = new JScrollPane(jTextArea1);
+		jScrollPane.setBounds(50, 60, 340, 390);
+		jScrollPane.setBorder(null);
+		panel.add(jScrollPane);
 
-		jTextField2 = new JTextField();
-		jTextField2.setText(" ");
-		jTextField2.setFont(new Font("Dialog.plain", 0, 12));
-		jTextField2.setBackground(new Color(255, 255, 255, 178));
-		jTextField2.setBounds(455, 60, 340, 390);
-		panel.add(jTextField2);
+		ImageIcon textIcon2 = new ImageIcon("C:\\photoshop\\solution2.jpg");
+		Image textImg2 = textIcon2.getImage();
+		jTextArea2 = new JTextArea() {
+			public void paintComponent(Graphics g) {
+				g.drawImage(textImg2, 0, 0, getWidth(), getHeight(), this);
+				super.paintComponent(g);
+			}
+		};
+		jTextArea2.setText(Que.QueArr[wrongQueNum[quesNum]][3]);
+		jTextArea2.setFont(new Font("Dialog.plain", 0, 12));
+		jTextArea2.setBackground(new Color(255, 255, 255, 178));
+		jTextArea2.setBounds(455, 60, 340, 390);
+		jTextArea2.setLineWrap(true);
+		jTextArea2.setFocusable(false);
+		JScrollPane jScrollPane2 = new JScrollPane(jTextArea2);
+		jScrollPane2.setBounds(455, 60, 340, 390);
+		jScrollPane2.setBorder(null);
+		panel.add(jScrollPane2);
 
 		jButton1 = new JButton();
 		jButton1.setIcon(new ImageIcon("C:\\photoshop\\return.png"));
@@ -2110,7 +2366,7 @@ class SolutionScreen extends JFrame {
 		jButton1.setOpaque(false);
 		jButton1.setBorderPainted(false);
 		jButton1.setBounds(6, 7, 60, 60);
-		ActionListener listener1 = new FinalScreenButton(this);
+		ActionListener listener1 = new FinalScreenButton(this, Que, wrongQueNum);
 		jButton1.addActionListener(listener1);
 		panel.add(jButton1);
 
@@ -2120,6 +2376,8 @@ class SolutionScreen extends JFrame {
 		jButton2.setOpaque(false);
 		jButton2.setBorderPainted(false);
 		jButton2.setBounds(30, 445, 115, 66);
+		ActionListener listener2 = new BeforeNext(this, 0, true);
+		jButton2.addActionListener(listener2);
 		panel.add(jButton2);
 
 		jButton3 = new JButton();
@@ -2128,7 +2386,49 @@ class SolutionScreen extends JFrame {
 		jButton3.setOpaque(false);
 		jButton3.setBorderPainted(false);
 		jButton3.setBounds(695, 445, 115, 66);
+		ActionListener listener3 = new BeforeNext(this, 1, true);
+		jButton3.addActionListener(listener3);
 		panel.add(jButton3);
+	}
+}
+
+class BeforeNext implements ActionListener {
+	SolutionScreen solutionScreen;
+	RetryScreen retryScreen;
+	int num = 0;
+	boolean solu = false;
+
+	public BeforeNext(SolutionScreen solutionScreen, int num, boolean solu) {
+		this.solutionScreen = solutionScreen;
+		this.num = num;
+		this.solu = solu;
+	}
+
+	public BeforeNext(RetryScreen retryScreen, int num) {
+		this.retryScreen = retryScreen;
+		this.num = num;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if (solu) {
+			if (num == 0 && solutionScreen.quesNum != 0)
+				solutionScreen.quesNum--;
+			else if (num == 1 && solutionScreen.quesNum != 5)
+				solutionScreen.quesNum++;
+			else {
+
+			}
+			solutionScreen.jTextArea1.setText((solutionScreen.quesNum + 1) + "ë²ˆ : "
+					+ solutionScreen.Que.QueArr[solutionScreen.wrongQueNum[solutionScreen.quesNum]][1] + "\n\n"
+					+ solutionScreen.Que.QueArr[solutionScreen.wrongQueNum[solutionScreen.quesNum]][2]);
+			solutionScreen.jTextArea2
+					.setText(solutionScreen.Que.QueArr[solutionScreen.wrongQueNum[solutionScreen.quesNum]][3]);
+		} else {
+			if (num == 0 && retryScreen.quesNum != 0)
+				retryScreen.quesNum++;
+			else
+				retryScreen.quesNum--;
+		}
 	}
 }
 
@@ -2141,7 +2441,12 @@ class QueParser {
 	int isCorrect;
 	int tokennumber;
 	int[] temp;
+	int[] ansNum = new int[3];
 	int num = 0;
+	int count = 0;
+	ArrayList<String> list, ex;
+	boolean retry = false;
+	int wrongNum = 0;
 
 	QueParser(int level) {
 		this.Answer = new String[3];
@@ -2162,200 +2467,166 @@ class QueParser {
 		QueProvider();
 	}
 
+	void setRetry() {
+		retry = true;
+	}
+
+	void QueProvider(int wrongNum) {
+		this.wrongNum = wrongNum;
+		QueProvider();
+	}
+
 	void QueProvider() {
-		String str = QueArr[num++][2];
-		// String str = "#include <stdio.h> \\n int main () \\n { \\n printf( \"
-		// Hello wolrd \" ); \\n return 0; \\n }";
-		int i = 0, j = 0;
+		String str;
+		if (retry)
+			str = QueArr[wrongNum][2];
+		else
+			str = QueArr[num++][2];
+		// String str = " #include <stdio.h> \n void main() \n { \n
+		// printf(\"Hello wolrd\"); \n } ";
+
+		boolean end = false;
+		char space = ' ';
+		list = new ArrayList<String>();
+		ex = new ArrayList<String>();
+		int i = 0;
+
+		for (i = 0;; i++) {
+			for (int j = i; j < str.length(); j++) {
+				if (j == str.length() - 1) {
+					list.add(str.substring(i, j));
+					ex.add(str.substring(i, j));
+					end = true;
+					break;
+				}
+				if (space == str.charAt(j)) {
+					list.add(str.substring(i, j));
+					list.add(" ");
+					ex.add(str.substring(i, j));
+					i = j;
+					break;
+				}
+			}
+			if (end)
+				break;
+		}
+
 		int tmp;
 		Random rd = new Random();
-		StringTokenizer st = new StringTokenizer(str);
-		int[] temp = new int[st.countTokens()];
-		Tokenize = new String[st.countTokens()];
-		tokennumber = st.countTokens();
+		temp = new int[list.size()];
 
-		while (st.hasMoreTokens()) {
-			temp[i] = i;
-			Tokenize[i] = st.nextToken();
-			i++;
-		}
-		for (i = 0; i < tokennumber; i++) {
-			int des = rd.nextInt(tokennumber);
-			tmp = temp[i];
-			temp[i] = temp[des];
-			temp[des] = tmp;
-		}
-
-		for (j = 0; j < 3;) {
-			int num = rd.nextInt(tokennumber);
-			if (Tokenize[num].equals("\\n") || Tokenize[num].equals("\""))
+		for (i = 0; i < 3;) {
+			int num = rd.nextInt(list.size());
+			if (list.get(num).equals(" ") || list.get(num).equals("\n") || list.get(num).equals("")
+					|| list.get(num).equals("\"") || list.get(num).equals("{") || list.get(num).equals("}")
+					|| list.get(num).equals("\n\n"))
 				continue;
-			if (j == 1 && Tokenize[temp[j - 1]].equals(Tokenize[num])) {
+			if (i == 1 && list.get(ansNum[0]).equals(list.get(num))) {
 				continue;
 			}
-			if ((j == 2 && Tokenize[temp[j - 2]].equals(Tokenize[num]))
-					|| (j == 2 && Tokenize[temp[j - 1]].equals(Tokenize[num]))) {
+			if ((i == 2 && list.get(ansNum[0]).equals(list.get(num)))
+					|| (i == 2 && list.get(ansNum[1]).equals(list.get(num)))) {
 				continue;
 			}
-			temp[j] = num;
-			j++;
+			ansNum[i++] = num;
 		}
 
-		for (j = 0; j < 2; j++) {
-			for (int k = j + 1; k < 3; k++) {
-				if (temp[j] > temp[k]) {
-					tmp = temp[j];
-					temp[j] = temp[k];
-					temp[k] = tmp;
+		for (i = 0; i < list.size(); i++) {
+			if (list.get(i).equals(" ") || list.get(i).equals("\n") || list.get(i).equals("")
+					|| list.get(i).equals("\"") || list.get(i).equals("{") || list.get(i).equals("}"))
+				continue;
+			count++;
+		}
+
+		for (i = 0; i < 3; i++) {
+			for (int j = i; j < 3; j++) {
+				if (ansNum[j] < ansNum[i]) {
+					tmp = ansNum[j];
+					ansNum[j] = ansNum[i];
+					ansNum[i] = tmp;
 				}
 			}
 		}
 
-		for (j = 0; j < 3; j++) {
-			Answer[j] = Tokenize[temp[j]];
-			Tokenize[temp[j]] = "_" + j + "_";
-		}
-		System.out.println("Queparser : " + Answer[0] + " " + Answer[1] + " "
-		+ Answer[2]);
-	}
-
-	int AnsCheck() {
-
-		if (isCorrect == 1) {
-			isCorrect = 0;
-			return 1;
-		} else {
-			return 0;
-		}
-	}
-
-	void BonusQueProvider() {
-		// String str = QueArr[0][0];
-		String str = "#include <stdio.h> void main ()" + "{ printf( \" Hello wolrd \" ) ;}";
-		int i = 0, j = 0;
-		int tmp;
-		Random rd = new Random();
-		StringTokenizer st = new StringTokenizer(str);
-		temp = new int[st.countTokens()];
-		Tokenize = new String[st.countTokens()];
-		while (st.hasMoreTokens()) {
-			temp[i] = i;
-			Tokenize[i] = st.nextToken();
-			i++;
-		}
-		for (i = 0; i < st.countTokens(); i++) {
-			int des = rd.nextInt(st.countTokens());
-			tmp = temp[i];
-			temp[i] = temp[des];
-			temp[des] = tmp;
-		}
-		for (j = 0; j < 3; j++) {
-			Answer[j] = Tokenize[temp[j]];
-			Tokenize[temp[j]] = "(***)";
+		for (i = 0; i < 3; i++) {
+			Answer[i] = list.get(ansNum[i]);
+			ex.remove(list.get(ansNum[i]));
+			list.set(ansNum[i], "_" + (i + 1) + "_");
 		}
 	}
 }
 
 class PointChecker {
+	TutorialScreen tutorialScreen;
 	int StartPoint;
 	int HintPoint;
 	int PassPoint;
 	int LeftLifePoint;
-	int LeftTime;
 	int Level;
 
-	PointChecker(int level) {
-		this.StartPoint = 100;
+	PointChecker(TutorialScreen tutorialScreen) {
+		this.tutorialScreen = tutorialScreen;
+		this.StartPoint = 1000;
 		this.HintPoint = 0;
 		this.PassPoint = 0;
 		this.LeftLifePoint = 0;
-		this.LeftTime = 0;
-		this.Level = level;
+	}
+
+	public void setScore() {
+		tutorialScreen.jLabel4.setText(String.valueOf(tutorialScreen.pointChecker.GetTotalScore()));
 	}
 
 	int GetTotalScore() {
-		if (Level == 1) {
-			return StartPoint + HintPoint + PassPoint + LeftLifePoint + (5 * LeftTime);
-		} else {
-			return StartPoint + HintPoint + PassPoint + LeftLifePoint;
-		}
+		return StartPoint + HintPoint + PassPoint + LeftLifePoint;
 	}
 
 	void MinusHint() {
 		this.HintPoint -= 5;
+		setScore();
 	}
 
 	void MinusPass() {
 		this.PassPoint -= 10;
+		setScore();
 	}
 
 	void MinusLife() {
 		this.LeftLifePoint -= 10;
+		setScore();
+	}
+
+	void plusBonus() {
+		this.StartPoint += 10;
+		setScore();
 	}
 
 	void SetLevel(int Button_value) {
 		this.Level = Button_value;
 	}
-
-	void SetLeftTime(int UI_LeftTime) {
-		this.LeftTime += UI_LeftTime;
-	}
 }
 
 class Blind extends QueParser {
-`
+
 	public Blind() {
 		super(3);
 	}
 
 	void QueProvider() {
-		// String str = QueArr[0][0];
-		String str = "#include <stdio.h> void main ()" + "{ printf( \" Hello wolrd \" ) ;}";
-		int i = 0, j = 0;
-		int tmp;
+		super.QueProvider();
 		Random rd = new Random();
-		StringTokenizer st = new StringTokenizer(str);
-		int[] temp = new int[st.countTokens()];
-		Tokenize = new String[st.countTokens()];
-		while (st.hasMoreTokens()) {
-			temp[i] = i;
-			Tokenize[i] = st.nextToken();
-			i++;
-		}
-		for (i = 0; i < st.countTokens(); i++) {
-			int des = rd.nextInt(st.countTokens());
-			tmp = temp[i];
-			temp[i] = temp[des];
-			temp[des] = tmp;
-		}
-		for (j = 0; j < 3; j++) {
-			Answer[j] = Tokenize[temp[j]];
-			Tokenize[temp[j]] = "(***)";
-		}
-		for (j = 4; j < st.countTokens(); j++) {
-			Tokenize[temp[j]] = "(BLIND!)";
+		for (int i = 0; i < 2; i++) {
+
+			int num = rd.nextInt(list.size());
+			if (list.get(num).equals("_1_") || list.get(num).equals("_2_") || list.get(num).equals("_3_")
+					|| list.get(num).equals("") || list.get(num).equals("\n") || list.get(num).equals("{")
+					|| list.get(num).equals("}") || list.get(num).equals("\"")) {
+				i--;
+				continue;
+			}
+			list.set(num, "(Blind !)");
 		}
 	}
-
-	int AnsCheck() {
-
-		if (isCorrect == 1) {
-			isCorrect = 0;
-			return 1;
-		} else {
-			return 0;
-		}
-	}
-
 }
-
-/**
- * @brief ¸ŞÀÎ ÇÔ¼ö°¡ Æ÷ÇÔÇÑ Å¬·¡½ºÀÔ´Ï´Ù.
- * @details DB ¿¬µ¿°ú °ÔÀÓÀ» ½ÃÀÛÇÕ´Ï´Ù.
- * @author ¼Ò°ø 2Á¶ ÄÚµåÀÇ¸¶¹ı»ç
- * @date 2016-11-26
- * @version 0.0.1
- */
 
 public class JDBCTest {
 	public static void main(String[] args) {
@@ -2363,7 +2634,7 @@ public class JDBCTest {
 		connectDatabase Database_connect = new connectDatabase();
 		Database_connect.connect();
 
-		StartScreen1 GUI_Interface = new StartScreen1();
+		LevelChoiceScreen1 GUI_Interface = new LevelChoiceScreen1();
 		GUI_Interface.setVisible(true);
 	}
 }
