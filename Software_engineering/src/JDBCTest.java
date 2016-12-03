@@ -13,7 +13,7 @@ import javazoom.jl.player.*;
 import java.sql.*;
 import java.util.Random;
 
-class StartScreen1 extends JFrame {
+class StartScreen1 extends JFrame { 
 	JPanel panel;
 
 	public StartScreen1() {
